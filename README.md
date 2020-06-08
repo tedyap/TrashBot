@@ -1,5 +1,7 @@
 # Trash Detection | CleanRobotics
 
+[![Documentation Status](https://readthedocs.org/projects/trashbot/badge/?version=latest)](https://trashbot.readthedocs.io/en/latest/?badge=latest) 
+
 Object Detection on a proprietary dataset of images provided by [CleanRobotics](https://cleanrobotics.com). The idea is to detect and localize objects captured in the staging bin of a CleanRobotics [TrashBot](https://cleanrobotics.com/trashbot/)&trade;, pass it onto the internal controller which will take care of the segregation based on the detected category and the local trash disposal policies.
 
 ## Project
