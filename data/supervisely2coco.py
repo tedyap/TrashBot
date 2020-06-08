@@ -40,8 +40,8 @@ def convert(meta: str, base_dir: str, output: str, image_name: bool):
 
     out_images = [
         convert_image(imgId, filenames[imgId], jsons[imgId],\
-            catmap, base_dir, image_name) for imgId in \
-            range(len(filenames))]
+        catmap, base_dir, image_name) for imgId in \
+        range(len(filenames))]
     
     images = [out[0] for out in out_images]
     annotations = [out[1] for out in out_images]
