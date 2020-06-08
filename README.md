@@ -1,12 +1,7 @@
-# Trash Segmentation | CleanRobotics
+# Trash Detection | CleanRobotics
 
-Instance Segmentation on a proprietary dataset of trash images provided by [CleanRobotics](https://cleanrobotics.com)
+Object Detection on a proprietary dataset of images provided by [CleanRobotics](https://cleanrobotics.com). The idea is to detect and localize objects captured in the staging bin of a CleanRobotics [TrashBot](https://cleanrobotics.com/trashbot/)&trade;, pass it onto the internal controller which will take care of the segregation based on the detected category and the local trash disposal policies.
 
-## Idea
+## Project
 
-Train an instance segmentation model(Mask R-CNN for now) to segment and tag trash images on a custom dataset. Implementation will be in Tensorflow/Keras with the goal of deploying the system on a Google Coral EdgeTPU device.
-
-## Timeline
-
-- 06/05 Minimum Viable Demo on a small subset of the data using Mask R-CNN in Tensorflow, Keras and Python3
-
+Train an object detection model(EfficientDet w/EfficientNet backbone) to detect and tag objects on a custom dataset. Deploy the model to be consumed via an API hosted on the cloud. Quantize model and optimize for deployment on the Google Coral edge device. 
