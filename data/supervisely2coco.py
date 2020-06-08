@@ -38,10 +38,9 @@ def convert(meta: str, base_dir: str, output: str, image_name: bool):
         "supercategory": "trash"
     } for k, v in catmap.items()]
 
-    out_images = [
-        convert_image(imgId, filenames[imgId], jsons[imgId],\
-        catmap, base_dir, image_name) for imgId in \
-        range(len(filenames))]
+    out_images = [convert_image(imgId, filenames[imgId], jsons[imgId],
+                  catmap, base_dir, image_name) for imgId in
+                  range(len(filenames))]
     
     images = [out[0] for out in out_images]
     annotations = [out[1] for out in out_images]
@@ -72,9 +71,9 @@ def convert(meta: str, base_dir: str, output: str, image_name: bool):
 
     with open(output, 'w') as f:
         logging.debug("Saving as JSON")
-        json.dump(coco, f, cls = NpEncoder)
+        json.dump(coco, f, cls=NpEncoder)
     
-def argument_parser(epilog: str = None)-> argparse.ArgumentParser:
+def argument_parser(epilog: str = None) -> argparse.ArgumentParser:
     """
     Create an argument parser for initiating the conversion process.
 
@@ -84,18 +83,16 @@ def argument_parser(epilog: str = None)-> argparse.ArgumentParser:
     Returns:
         argparse.ArgumentParser
     """
-    parser = argparse.ArgumentParser(epilog= epilog or f"""
+    parser = argparse.ArgumentParser(epilog=epilog or f"""
     Example:
-        python supervisely2coco.py --meta /path/to/meta.json --annotations /path/to/annotations/folder --output /path/to/output.json
+        python supervisely2coco.py --meta /path/to/meta.json --annotations /path/to/annotations/folder --output /path/to/output.json # noqa: E501, F541
     """)
 
-    parser.add_argument("--meta", "-m", help = 'Path to meta.json file')
-    parser.add_argument("--annotations", "-a", help = "Annotations base dir")
-    parser.add_argument("--output", "-o", help = "Output json filename")
-    parser.add_argument("-image-name", '-n', action = 'store_true',
-                        help = 'Save only filename(without absolute path')
-
-
+    parser.add_argument("--meta", "-m", help="Path to meta.json file")
+    parser.add_argument("--annotations", "-a", help="Annotations base dir")
+    parser.add_argument("--output", "-o", help="Output json filename")
+    parser.add_argument("-image-name", '-n', action="store_true",
+                        help="Save only filename(without absolute path")
     return parser
 
 def main():
@@ -111,9 +108,9 @@ def main():
 
     logger.info("Conversion started")
     try:
-        convert(meta = meta, base_dir = base_dir, output = savefile, image_name = flag)
+        convert(meta=meta, base_dir=base_dir, output=savefile, image_name=flag)
         logger.info('Finished converting. Check the output file for results.')
-    except:
+    except Exception:
         logger.error('Could not convert. Please refer to the logs for more details')
     
 

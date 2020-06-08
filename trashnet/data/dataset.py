@@ -6,12 +6,12 @@ import cv2 as cv
 import numpy as np
 
 from pycocotools.coco import COCO
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 
 class Coco(Dataset):
     """
     """
-    def __init__(self, root, data = 'train2017', transforms = None):
+    def __init__(self, root, data='train2017', transforms=None):
         self.root_dir = root
         self.set = data
         self.transforms = transforms
@@ -50,7 +50,7 @@ class Coco(Dataset):
         """
 
         categories = self.coco.loadCats(self.coco.getCatIds())
-        categories.sort(key = lambda x: x['id'])
+        categories.sort(key=lambda x: x['id'])
 
         for c in categories:
             self.labels[len(self.classes)] = c['id']
@@ -78,7 +78,7 @@ class Coco(Dataset):
     def load_annotations(self, idx):
         """
         """
-        annotationIds = self.coco.getAnnIds(imgIds = self.imageIds[idx], iscrowd = False)
+        annotationIds = self.coco.getAnnIds(imgIds=self.imageIds[idx], iscrowd=False)
         default = np.zeros((0, 5))
 
         if not annotationIds or len(annotationIds) == 0:
@@ -93,7 +93,7 @@ class Coco(Dataset):
             annotation = np.zeros((1, 5))
             annotation[0, :4] = ann['bbox']
             annotation[0, 4] = self.coco2label(ann['category_id'])
-            annotations = np.append(default, annotation, axis = 0)
+            annotations = np.append(default, annotation, axis=0)
 
         annotations[:, 2] = annotations[:, 0] + annotations[:, 2]
         annotations[:, 3] = annotations[:, 1] + annotations[:, 3]

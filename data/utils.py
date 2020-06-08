@@ -7,7 +7,8 @@ import json
 import numpy as np
 import glob
 from pathlib import Path
-from typing import Tuple, Dict, Any
+from typing import Tuple
+
 
 class NpEncoder(json.JSONEncoder):
     """Helper class for JSON dumping
@@ -36,13 +37,13 @@ def get_categories(meta: str) -> dict:
         meta_json = json.load(f)
     
     categories = [c['title'] for c in meta_json['classes']]
-    catmap = {c:idx for idx, c in enumerate(categories)}
+    catmap = {c: idx for idx, c in enumerate(categories)}
     return catmap
 
 def get_all_annotation_files(base_dir: str) -> Tuple[list, list]:
     """
-    Get all annotation filenames and corresponding jsons 
-
+    Get all annotation filenames and corresponding jsons
+    
     Args:
         base_dir (str): path to base directory for annotations
     
@@ -61,7 +62,8 @@ def get_all_annotation_files(base_dir: str) -> Tuple[list, list]:
     
     return image_files, jsons
 
-def convert_image(id: int, name: str, jsons, category: dict, base_dir: str, image_name = False, start_idx = 0) -> Tuple[dict, list]:
+def convert_image(id: int, name: str, jsons, category: dict, base_dir: str,
+                  image_name=False, start_idx=0) -> Tuple[dict, list]:
     """
     Convert single image annotations to COCO representation
 
@@ -90,10 +92,10 @@ def convert_image(id: int, name: str, jsons, category: dict, base_dir: str, imag
     exteriors = [np.array(obj['points']['exterior']) for obj in objects]
 
     bbox = [[
-        exterior.min(axis = 0)[0],
-        exterior.min(axis = 0)[1],
-        exterior.max(axis = 0)[0],
-        exterior.max(axis = 0)[1]
+        exterior.min(axis=0)[0],
+        exterior.min(axis=0)[1],
+        exterior.max(axis=0)[0],
+        exterior.max(axis=0)[1]
     ] for exterior in exteriors]
 
     annotations = [{
