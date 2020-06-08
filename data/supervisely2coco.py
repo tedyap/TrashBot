@@ -7,25 +7,15 @@
 Convert from Supervisely to MS-COCO format
 """
 
-import os
 import json
-import glob
-import numpy as np
-from pathlib import Path
 from datetime import datetime
-import sys
 import logging
 import argparse
-from typing import Union
 
 from .utils import get_all_annotation_files, get_categories, convert_image
 from .utils import NpEncoder
 
 def convert(meta: str, base_dir: str, output: str, image_name: bool):
-    print(type(meta), meta)
-    print(type(base_dir), base_dir)
-    print(type(output), output)
-    print(type(image_name), image_name)
     """
     Convert from supervisely to COCO
 
