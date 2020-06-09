@@ -120,3 +120,54 @@ class BiFPN(nn.Module):
         p7_out = self.conv7_down(weight[0] * p7_in + weight[1] * self.p7_downsample(p6_out))
 
         return p3_out, p4_out, p5_out, p6_out, p7_out
+
+class Classifier(nn.Module):
+    """
+    """
+    def __init__(self, in_channels, n_anchors, n_classes, n_layers):
+        super(Classifier, self).__init__()
+        self.n_anchors = n_anchors
+        self.n_classes = n_classes
+        layers = []
+        for _ in range(n_layers):
+            layers.append(nn.Conv2d(in_channels, in_channels, kernel_size=3, stride=1, padding=1))
+            layers.append(nn.ReLU(True))
+        self.layers = nn.Sequential(*layers)
+        self.header = nn.Conv2d(
+            in_channels, n_anchors * n_classes, kernel_size=3, stride=1, padding=1
+        )
+        self.activation = nn.Sigmoid()
+
+    def forward(self, x):
+        """
+        """
+        x = self.layers(x)
+        x = self.header(x)
+        x = self.activation(x)
+        x = x.permute(0, 2, 3, 1)
+        out = x.contiguous().view(
+            x.shape[0], x.shape[1], x.shape[2], self.n_anchors, self.n_classes
+        )
+        out = out.contiguous().view(out.shape[0], -1, self.n_classes)
+        return out
+
+class Regressor(nn.Module):
+    """
+    """
+    def __init__(self, in_channels, n_anchors, n_layers):
+        super(Regressor, self).__init__()
+        layers = []
+        for _ in range(n_layers):
+            layers.append(nn.Conv2d(in_channels, in_channels, kernel_size=3, stride=1, padding=1))
+            layers.append(nn.ReLU(True))
+        self.layers = nn.Sequential(*layers)
+        self.header = nn.Conv2d(in_channels, n_anchors * 4, kernel_size=3, stride=1, padding=1)
+
+    def forward(self, x):
+        """
+        """
+        x = self.layers(x)
+        x = self.header(x)
+        out = x.permute(0, 2, 3, 1)
+        out = out.contiguous().view(out.shape[0], -1, 4)
+        return out
