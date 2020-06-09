@@ -4,6 +4,10 @@
 import numpy as np
 import torch
 import torch.nn as nn
+from torchvision.ops.boxes import nms as nms_torch
+
+def nms(det, threshold):
+    return nms_torch(det[:, :4], det[:, 4], threshold)
 
 class Swish(nn.Module):
     """
