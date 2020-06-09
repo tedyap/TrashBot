@@ -13,8 +13,10 @@ class ConvBlock(nn.Module):
         if out_channels is None:
             out_channels = in_channels
 
-        self.depthwise_conv = nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=1, padding=1, groups=in_channels)
-        self.pointwise_conv = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=0)
+        self.depthwise_conv = nn.Conv2d(
+            in_channels, out_channels, kernel_size=3, stride=1, padding=1, groups=in_channels)
+        self.pointwise_conv = nn.Conv2d(
+            in_channels, out_channels, kernel_size=1, stride=1, padding=0)
         self.bn = nn.BatchNorm3d(num_features=out_channels, momentum=0.001, eps=1e-4)
         self.activation = Swish() if use_swish else nn.ReLU()
 
@@ -34,8 +36,8 @@ class BiFPN(nn.Module):
     def __init__(self, num_channels, epsilon: int = 1e-4):
         super(BiFPN, self).__init__()
         self.epsilon = epsilon
-
-        ## Convolutional layers 
+        
+        # Convolutional layers
         self.conv6_up = ConvBlock(num_channels)
         self.conv5_up = ConvBlock(num_channels)
         self.conv4_up = ConvBlock(num_channels)
@@ -46,7 +48,7 @@ class BiFPN(nn.Module):
         self.conv6_down = ConvBlock(num_channels)
         self.conv7_down = ConvBlock(num_channels)
 
-        ## Feature Scaling layers
+        # Feature Scaling layers
         self.p6_upsample = nn.UpSample(scale_factor=2, mode='nearest')
         self.p5_upsample = nn.UpSample(scale_factor=2, mode='nearest')
         self.p4_upsample = nn.UpSample(scale_factor=2, mode='nearest')
@@ -57,7 +59,7 @@ class BiFPN(nn.Module):
         self.p6_downsample = nn.MaxPool2d(kernel_size=2)
         self.p7_downsample = nn.MaxPool2d(kernel_size=2)
 
-        ## Weights
+        # Weights
         self.p6_w1 = nn.Parameter(torch.ones(2, dtype=torch.float32), requires_grad=True)
         self.p6_w1_relu = nn.ReLU()
         self.p5_w1 = nn.Parameter(torch.ones(2, dtype=torch.float32), requires_grad=True)
@@ -118,4 +120,3 @@ class BiFPN(nn.Module):
         p7_out = self.conv7_down(weight[0] * p7_in + weight[1] * self.p7_downsample(p6_out))
 
         return p3_out, p4_out, p5_out, p6_out, p7_out
-        
