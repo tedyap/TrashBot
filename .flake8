@@ -1,5 +1,6 @@
 [flake8]
 ignore = W292, W293, E302
+doctests = True
 max-line-length = 100
 max-complexity = 18
 select = E,W,F,C
