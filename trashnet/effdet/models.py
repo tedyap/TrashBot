@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 
 from effnet import EfficientNet
-from layers import ConvBlock, BiFPN, Regressor, Classifier
+from layers import BiFPN, Regressor, Classifier
 from utils import ClipBoxes, BBoxTransform, Anchors, nms
 from losses import FocalLoss
 
@@ -61,7 +61,7 @@ class EfficientDet(nn.Module):
         self.regressor.header.bias.data.fill_(0)
 
         self.classifier.header.weight.data.fill_(0)
-        self.classifier.header.bias.data.fill_(-math.log((1. - self.prior) / self.prior))        
+        self.classifier.header.bias.data.fill_(-math.log((1. - self.prior) / self.prior))
 
     def freeze(self):
         """
