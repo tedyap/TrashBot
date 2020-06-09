@@ -57,7 +57,19 @@ class BBoxTransform(nn.Module):
 
         return torch.stack([pred_box_x1, pred_box_y1, pred_box_x2, pred_box_y2])
 
+class ClipBoxes(nn.Module):
+    """
+    """
+    def __init__(self):
+        super(ClipBoxes, self).__init__()
 
+    def forward(self, anchors, image):
+        """
+        """
+        _, _, h, w = image.shape
+        anchors[:, :, 0] = torch.clamp(anchors[:, :, 0], min=0)
+        anchors[:, :, 1] = torch.clamp(anchors[:, :, 1], min=0)
+        anchors[:, :, 2] = torch.clamp(anchors[:, :, 2], max=w)
+        anchors[:, :, 3] = torch.clamp(anchors[:, :, 3], min=h)
 
-
-
+        return anchors
