@@ -1,15 +1,19 @@
-.. TrashBot documentation master file, created by
-   sphinx-quickstart on Mon Jun  8 09:07:41 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Documentation
+===================================
 
-Welcome to TrashBot!
-====================================
+CleanRobotics TrashBot is a smart assisted waste sorrting bin 
+that uses AI and Computer Vision to segregate different kinds
+of trash. 
+
+This project is my work for the Insight Artificial Intelligence
+Fellowship, New York in collaboration with CleanRobotics. The 
+idea behind the project is to develop and object detection 
+solution for the TrashBot. Find out more 
+about `TrashBot <https://cleanrobotics.com/trashbot/>`_.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   about
-
-This is the documentation
+   :glob:
+   :maxdepth: 1
+   :caption: TrashNet
+ 
+   trashnet/*
