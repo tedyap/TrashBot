@@ -27,7 +27,7 @@ def argument_parser(epilog: str = None):
 
     parser = argparse.ArgumentParser(epilog=epilog or f"""
     Example:
-        python train.py --meta /path/to/meta.json --annotations /path/to/annotations/folder --output /path/to/output.json # noqa: E501, F541
+        python train.py --meta /path/to/meta.json --annotations /path/to/annotatios/folder --output /path/to/output.json # noqa: F541
     """)
 
     parser.add_argument("--image_size", type=int, default=512, help="The height and width for images passed to the network")
