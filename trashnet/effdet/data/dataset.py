@@ -5,6 +5,7 @@ import os
 import cv2 as cv
 import numpy as np
 
+import torch
 from pycocotools.coco import COCO
 from torch.utils.data import Dataset
 
@@ -111,3 +112,28 @@ class Coco(Dataset):
         img = img.astype(np.float32) / 255.0
 
         return img
+
+def collate(data):
+    """
+    """
+    images = [d['img'] for d in data]
+    annotations = [d['annot'] for d in data]
+    scales = [d['scale'] for d in data]
+
+    images = torch.from_numpy(np.stack(images, axis=0))
+    max_annotations = max(annotation.shape[0] for annotation in annotations)
+    if max_annotations > 0:
+        annotations_padded = torch.ones((len(annotations), max_annotations, 5)) * -1
+        if max_annotations > 0:
+            for idx, annotation in enumerate(annotations):
+                if annotation.shape[0] > 0:
+                    annotations_padded[idx, :annotation.shape[0], :] = annotation
+    else:
+        annotations_padded = torch.ones((len(annotations), 1, 5)) * -1
+
+    images = images.permute(0, 3, 1, 2)
+    return {
+        'img': images,
+        'annot': annotations_padded,
+        'scale': scales
+    }
