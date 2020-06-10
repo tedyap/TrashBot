@@ -43,8 +43,8 @@ def argument_parser(epilog: str = None):
     parser.add_argument("--log", type=str, default="tensorboard/", help="Path to tensorboard log directory")
     parser.add_argument("--save_path", type=str, default="models", help="Path to model save directory")
 
-    args = parser.parse_args()
-    return args
+    arg = parser.parse_args()
+    return arg
 
 def train(args):
     """
@@ -173,3 +173,14 @@ def train(args):
                 best_loss = loss
                 best_epoch = epoch
                 torch.save(model, os.path.join(args.save_path, "trashnet_" + str(epoch) + ".pth"))
+
+            if epoch - best_epoch > args.es_patience > 0:
+                logger.debug("Stop training at epoch {}. The lowest loss achieved is {}".format(epoch, loss))
+                break
+
+    writer.close()
+
+
+if __name__ == "__main__":
+    args = argument_parser()
+    train(args)

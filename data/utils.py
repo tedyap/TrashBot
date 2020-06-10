@@ -14,6 +14,9 @@ class NpEncoder(json.JSONEncoder):
     """Helper class for JSON dumping
     """
     def default(self, obj):
+        """
+        Return serializable object
+        """
         if isinstance(obj, np.integer):
             return int(obj)
         elif isinstance(obj, np.ndarray):
