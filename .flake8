@@ -5,4 +5,5 @@ max-line-length = 100
 max-complexity = 18
 select = E,W,F,C
 exclude = .git, .vscode
-per-file-ignores = docs/conf.py:F401
+per-file-ignores = docs/conf.py:F401,
+                   trashnet/train.py:E501
