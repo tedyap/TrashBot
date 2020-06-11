@@ -72,12 +72,15 @@ sed -i "s%CKPT_DIR_TO_CONFIGURE%${CKPT_DIR}%g" "${CKPT_DIR}/pipeline.config"
 sed -i "s%DATASET_DIR_TO_CONFIGURE%${DATASET_DIR}%g" "${CKPT_DIR}/pipeline.config"
 
 echo "PREPARING dataset"
+mkdir -p "${ARCHIVE_DIR}"
 mkdir -p "${DATASET_DIR}"
+
 cd "${DATASET_DIR}"
 
 ## Downloading data
 curl -L "https://app.roboflow.ai/ds/L3nnF5sECW?key=V9TYXibLCN" > coco.zip
 unzip coco.zip
+mv coco.zip "${ARCHIVE_DIR}"
 
 mkdir "${TFRECORDS_DIR}" && cd "${TFRECORDS_DIR}"
 curl -L "https://app.roboflow.ai/ds/FWaxjuc7VD?key=9JHOfJ01C3" > tfrecords.zip
@@ -88,6 +91,9 @@ cd "${DATASET_DIR}"
 cp "tfrecords/train/paper-aluminum-cans-plastic_label_map.pbtxt" "${DATASET_DIR}"
 mv "paper-aluminum-cans-plastic_label_map.pbtxt" "trash_label_map.pbtxt"
 
+# cd "${TFRECORDS_DIR}"
+mv tfrecords/ "${ARCHIVE_DIR}"
+
 echo "CONVERTING dataset to TF Record..."
 cd "${OBJ_DET_DIR}"
 python object_detection/dataset_tools/create_coco_tf_record.py --logtostderr\
@@ -97,4 +103,4 @@ python object_detection/dataset_tools/create_coco_tf_record.py --logtostderr\
       --train_annotations_file="${TRAIN_ANNOTATIONS_FILE}" \
       --val_annotations_file="${VAL_ANNOTATIONS_FILE}" \
       --testdev_annotations_file="${TESTDEV_ANNOTATIONS_FILE}" \
-      --output_dir="${OUTPUT_DIR}"
+      --output_dir="${DATASET_DIR}"
