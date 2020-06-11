@@ -19,7 +19,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from tensorboardX import SummaryWriter
-from tqdm.autonotebook import tqdm
+from tqdm import tqdm
 
 def argument_parser(epilog: str = None):
     """
@@ -164,7 +164,11 @@ def train(args):
             reg_loss = np.mean(regression_losses)
 
             loss = cls_loss + reg_loss
-                        
+
+            print(
+                "Epoch: {}/{} Classification Loss: {:1.5f} Regression Loss{:1.5f} Total Loss: {:1.5f}".format(
+                    epoch + 1, args.num_epochs, cls_loss, reg_loss, np.mean(loss)))
+
             writer.add_scalar('Val/Total_loss', loss, epoch)
             writer.add_scalar('Val/Regression Loss', reg_loss, epoch)
             writer.add_scalar('Val/Classfication Loss (focal loss)', cls_loss, epoch)
