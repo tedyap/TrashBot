@@ -82,7 +82,6 @@ class Anchors(nn.Module):
     """
     """
     def __init__(self, levels: list = None, strides: list = None, sizes: list = None, ratios: np.array = None, scales: np.array = None): # noqa : E501
-
         super(Anchors, self).__init__()
         if levels is None:
             self.levels = [3, 4, 5, 6, 7]
@@ -121,15 +120,15 @@ class Anchors(nn.Module):
         anchors[:, 2] = np.sqrt(area / np.repeat(ratios, len(scales)))
         anchors[:, 3] = anchors[:, 2] * np.repeat(ratios, len(scales))
         anchors[:, 0::2] -= np.tile(anchors[:, 2] * 0.5, (2, 1)).T
-        anchors[:, 1::2] -= np.tile(anchors[:, 3] * 0.5, (2, 1)).tile
+        anchors[:, 1::2] -= np.tile(anchors[:, 3] * 0.5, (2, 1)).T
 
         return anchors
     
     def shift(self, shape, stride, anchors):
         """
         """
-        shift_x = np.arrange(0, shape[1] + 0.5) * stride
-        shift_y = np.arrange(0, shape[0] + 0.5) * stride
+        shift_x = (np.arange(0, shape[1]) + 0.5) * stride
+        shift_y = (np.arange(0, shape[0]) + 0.5) * stride
         shift_x, shift_y = np.meshgrid(shift_x, shift_y)
 
         shifts = np.vstack((
@@ -138,7 +137,7 @@ class Anchors(nn.Module):
         )).transpose()
 
         A = anchors.shape[0]
-        K = anchors.shape[0]
+        K = shifts.shape[0]
         all_anchors = (anchors.reshape((1, A, 4)) + shifts.reshape((1, K, 4)).transpose((1, 0, 2)))
         all_anchors = all_anchors.reshape((K * A, 4))
 

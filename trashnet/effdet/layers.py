@@ -17,7 +17,7 @@ class ConvBlock(nn.Module):
             in_channels, out_channels, kernel_size=3, stride=1, padding=1, groups=in_channels)
         self.pointwise_conv = nn.Conv2d(
             in_channels, out_channels, kernel_size=1, stride=1, padding=0)
-        self.bn = nn.BatchNorm3d(num_features=out_channels, momentum=0.001, eps=1e-4)
+        self.bn = nn.BatchNorm2d(num_features=out_channels, momentum=0.9997, eps=4e-5)
         self.activation = Swish() if use_swish else nn.ReLU()
 
         self.conv = nn.Sequential(
@@ -49,10 +49,10 @@ class BiFPN(nn.Module):
         self.conv7_down = ConvBlock(num_channels)
 
         # Feature Scaling layers
-        self.p6_upsample = nn.UpSample(scale_factor=2, mode='nearest')
-        self.p5_upsample = nn.UpSample(scale_factor=2, mode='nearest')
-        self.p4_upsample = nn.UpSample(scale_factor=2, mode='nearest')
-        self.p3_upsample = nn.UpSample(scale_factor=2, mode='nearest')
+        self.p6_upsample = nn.Upsample(scale_factor=2, mode='nearest')
+        self.p5_upsample = nn.Upsample(scale_factor=2, mode='nearest')
+        self.p4_upsample = nn.Upsample(scale_factor=2, mode='nearest')
+        self.p3_upsample = nn.Upsample(scale_factor=2, mode='nearest')
         
         self.p4_downsample = nn.MaxPool2d(kernel_size=2)
         self.p5_downsample = nn.MaxPool2d(kernel_size=2)

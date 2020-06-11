@@ -30,17 +30,17 @@ class Augment(object):
             _, c, _ = image.shape
 
             x1 = annotation[:, 0].copy()
-            x2 = annotation[:, ].copy()
+            x2 = annotation[:, 2].copy()
 
             temp = x1.copy()
             annotation[:, 0] = c - x2
             annotation[:, 2] = c - temp
 
-            sample = {
+            s = {
                 'img': image,
                 'annot': annotation
             }
-        return sample
+        return s
 
 class Resize(object):
     """

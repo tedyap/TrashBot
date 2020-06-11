@@ -6,10 +6,10 @@ import math
 import torch
 import torch.nn as nn
 
-from effnet import EfficientNet
-from layers import BiFPN, Regressor, Classifier
-from utils import ClipBoxes, BBoxTransform, Anchors, nms
-from losses import FocalLoss
+from .effnet import EfficientNet
+from .layers import BiFPN, Regressor, Classifier
+from .utils import ClipBoxes, BBoxTransform, Anchors, nms
+from .losses import FocalLoss
 
 class EfficientDet(nn.Module):
     """
@@ -34,7 +34,8 @@ class EfficientDet(nn.Module):
             min(2 + self.compound_coef, 8))]
         )
         self.n_classes = n_classes
-        
+        self.n_anchors = n_anchors
+
         self.regressor = Regressor(
             in_channels=self.n_channels, n_anchors=n_anchors,
             n_layers=3 + self.compound_coef // 3
@@ -51,7 +52,7 @@ class EfficientDet(nn.Module):
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                n = m.kernel_size[0] * m.kernel_size[1] * m._out_channels
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
                 m.weight.data.normal_(0, math.sqrt(2. / n))
             elif isinstance(m, nn.BatchNorm2d):
                 m.weight.data.fill_(1)

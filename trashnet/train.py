@@ -53,12 +53,12 @@ def train(args):
     logger = logging.getLogger('logger')
     if torch.cuda.is_available():
         n_gpus = torch.cuda.device_count()
-        torch.cuda.manuel_seed(42)
+        torch.cuda.manual_seed(42)
     else:
-        torch.manuel_seed(42)
+        torch.manual_seed(42)
     
     train_dict = {
-        'bs': args.batch_size * n_gpus,
+        'batch_size': args.batch_size * n_gpus,
         'shuffle': True,
         'drop_last': True,
         'collate_fn': collate,
@@ -66,7 +66,7 @@ def train(args):
     }
 
     test_dict = {
-        'bs': args.batch_size,
+        'batch_size': args.batch_size,
         'shuffle': False,
         'drop_last': False,
         'collate_fn': collate,
@@ -83,7 +83,7 @@ def train(args):
     ))
     test_dl = DataLoader(test_ds, **test_dict)
 
-    model = EfficientDet(n_classes=train_ds.num_classes())
+    model = EfficientDet(n_classes=train_ds.get_num_classes())
 
     if os.path.isdir(args.log):
         shutil.rmtree(args.log)
@@ -128,7 +128,7 @@ def train(args):
 
                 loss.backward()
 
-                nn.utils.clip_grad_norm(model.parameters(), 0.1)
+                nn.utils.clip_grad_norm_(model.parameters(), 0.1)
 
                 optim.step()
                 losses.append(float(loss))

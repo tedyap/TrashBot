@@ -39,11 +39,11 @@ class Coco(Dataset):
             'annot': annotation
         }
         if self.transforms:
-            out = self.transform(out)
+            out = self.transforms(out)
         
         return out
 
-    def __len(self):
+    def __len__(self):
         return len(self.imageIds)
 
     def load_classes(self):
@@ -86,7 +86,7 @@ class Coco(Dataset):
             return default
 
         cocoAnnotations = self.coco.loadAnns(annotationIds)
-        
+
         for idx, ann in enumerate(cocoAnnotations):
             if ann['bbox'][2] < 1 or ann['bbox'][3] < 1:
                 continue
@@ -108,7 +108,7 @@ class Coco(Dataset):
         info = self.coco.loadImgs(self.imageIds[idx])[0]
         path = os.path.join(self.root_dir, 'images', self.set, info['file_name'])
         image = cv.imread(path)
-        img = cv.CvtColor(image, cv.COLOR_BGR2RGB)
+        img = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         img = img.astype(np.float32) / 255.0
 
         return img
