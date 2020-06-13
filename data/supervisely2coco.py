@@ -12,8 +12,8 @@ from datetime import datetime
 import logging
 import argparse
 
-from .utils import get_all_annotation_files, get_categories, convert_image
-from .utils import NpEncoder
+from utils import get_all_annotation_files, get_categories, convert_image
+from utils import NpEncoder
 
 def convert(meta: str, base_dir: str, output: str, image_name: bool):
     """
