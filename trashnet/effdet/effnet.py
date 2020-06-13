@@ -20,7 +20,7 @@ class EfficientNet(nn.Module):
     def forward(self, x):
         """
         """
-        x = self.net._swish(self.model._bn0(self.net._conv_stem(x)))
+        x = self.net._swish(self.net._bn0(self.net._conv_stem(x)))
         feature_maps = []
 
         for idx, block in enumerate(self.net._blocks):

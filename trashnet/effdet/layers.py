@@ -60,22 +60,22 @@ class BiFPN(nn.Module):
         self.p7_downsample = nn.MaxPool2d(kernel_size=2)
 
         # Weights
-        self.p6_w1 = nn.Parameter(torch.ones(2, dtype=torch.float32), requires_grad=True)
+        self.p6_w1 = nn.Parameter(torch.ones(2))
         self.p6_w1_relu = nn.ReLU()
-        self.p5_w1 = nn.Parameter(torch.ones(2, dtype=torch.float32), requires_grad=True)
+        self.p5_w1 = nn.Parameter(torch.ones(2))
         self.p5_w1_relu = nn.ReLU()
-        self.p4_w1 = nn.Parameter(torch.ones(2, dtype=torch.float32), requires_grad=True)
+        self.p4_w1 = nn.Parameter(torch.ones(2))
         self.p4_w1_relu = nn.ReLU()
-        self.p3_w1 = nn.Parameter(torch.ones(2, dtype=torch.float32), requires_grad=True)
+        self.p3_w1 = nn.Parameter(torch.ones(2))
         self.p3_w1_relu = nn.ReLU()
 
-        self.p4_w2 = nn.Parameter(torch.ones(3, dtype=torch.float32), requires_grad=True)
+        self.p4_w2 = nn.Parameter(torch.ones(3))
         self.p4_w2_relu = nn.ReLU()
-        self.p5_w2 = nn.Parameter(torch.ones(3, dtype=torch.float32), requires_grad=True)
+        self.p5_w2 = nn.Parameter(torch.ones(3))
         self.p5_w2_relu = nn.ReLU()
-        self.p6_w2 = nn.Parameter(torch.ones(3, dtype=torch.float32), requires_grad=True)
+        self.p6_w2 = nn.Parameter(torch.ones(3))
         self.p6_w2_relu = nn.ReLU()
-        self.p7_w2 = nn.Parameter(torch.ones(2, dtype=torch.float32), requires_grad=True)
+        self.p7_w2 = nn.Parameter(torch.ones(2))
         self.p7_w2_relu = nn.ReLU()
 
     def forward(self, x):
