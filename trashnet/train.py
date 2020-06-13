@@ -123,7 +123,7 @@ def train(args):
                 
                 classification_loss = classification_loss.mean()
                 regression_loss = regression_loss.mean()
-                
+
                 loss = classification_loss + regression_loss
                 if loss == 0:
                     continue
@@ -137,7 +137,7 @@ def train(args):
                 total_loss = np.mean(losses)
 
                 prog_bar.set_description(
-                    "Epoch: {}/{} Iteration: {}/{} Cls_Loss: {1.5f} Batch_Loss: {1.5f} Total Loss: {1.5f}".format(
+                    "Epoch: {}/{} Iteration: {}/{} Cls_Loss: {:1.5f} Reg_Loss: {:1.5f} Batch_Loss: {:1.5f} Total Loss: {:1.5f}".format(
                         epoch + 1, args.num_epochs, iteration + 1, iters_per_epoch, 
                         classification_loss, regression_loss, loss, total_loss
                     )
