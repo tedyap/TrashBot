@@ -20,13 +20,13 @@ class EfficientNet(nn.Module):
     def forward(self, x):
         """
         """
-        x = self.model._swish(self.model._bn0(self.model._conv_stem(x)))
+        x = self.net._swish(self.model._bn0(self.net._conv_stem(x)))
         feature_maps = []
 
-        for idx, block in enumerate(self.model._blocks):
-            drop_connect_rate = self.model._global_params.drop_connect_rate
+        for idx, block in enumerate(self.net._blocks):
+            drop_connect_rate = self.net._global_params.drop_connect_rate
             if drop_connect_rate:
-                drop_connect_rate = drop_connect_rate * float(idx) / len(self.model._blocks)
+                drop_connect_rate *= float(idx) / len(self.net._blocks)
             x = block(x, drop_connect_rate=drop_connect_rate)
             if block._depthwise_conv.stride == [2, 2]:
                 feature_maps.append(x)

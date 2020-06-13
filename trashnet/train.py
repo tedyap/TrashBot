@@ -136,6 +136,7 @@ def train(args):
                 losses.append(float(loss))
                 total_loss = np.mean(losses)
 
+                print("Training Set:\n")
                 prog_bar.set_description(
                     "Epoch: {}/{} Iteration: {}/{} Cls_Loss: {:1.5f} Reg_Loss: {:1.5f} Batch_Loss: {:1.5f} Total Loss: {:1.5f}".format(
                         epoch + 1, args.num_epochs, iteration + 1, iters_per_epoch, 
@@ -175,8 +176,9 @@ def train(args):
 
             loss = cls_loss + reg_loss
 
+            print("Validation Set:\n")
             print(
-                "Epoch: {}/{} Classification Loss: {:1.5f} Regression Loss{:1.5f} Total Loss: {:1.5f}".format(
+                "Epoch: {}/{} Classification Loss: {:1.5f} Regression Loss: {:1.5f} Total Loss: {:1.5f}".format(
                     epoch + 1, args.num_epochs, cls_loss, reg_loss, np.mean(loss)))
 
             writer.add_scalar('Val/Total Loss', loss, epoch)

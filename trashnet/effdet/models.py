@@ -20,6 +20,7 @@ class EfficientDet(nn.Module):
         self.prior = 0.01
         self.classification_threshold = 0.05
         self.compound_coef = compound_coef
+
         self.n_channels = [64, 88, 112, 160, 224, 288, 384, 384][self.compound_coef]
 
         self.conv3 = nn.Conv2d(40, self.n_channels, kernel_size=1, stride=1, padding=0)
@@ -37,7 +38,7 @@ class EfficientDet(nn.Module):
         self.n_anchors = n_anchors
 
         self.regressor = Regressor(
-            in_channels=self.n_channels, n_anchors=n_anchors,
+            in_channels=self.n_channels, n_anchors=self.n_anchors,
             n_layers=3 + self.compound_coef // 3
         )
 
@@ -45,9 +46,9 @@ class EfficientDet(nn.Module):
             in_channels=self.n_channels, n_anchors=self.n_anchors,
             n_classes=self.n_classes, n_layers=3 + self.compound_coef // 3
         )
-        self.clips = ClipBoxes()
+        self.clipBox = ClipBoxes()
         self.loss = FocalLoss()
-        self.regress = BBoxTransform()
+        self.regressBox = BBoxTransform()
         self.anchors = Anchors()
 
         for m in self.modules():
@@ -74,7 +75,7 @@ class EfficientDet(nn.Module):
     def forward(self, x):
         """
         """
-        if len(x) > 1:
+        if len(x) == 2:
             train = True
             batch, annotations = x
         else:
@@ -98,19 +99,20 @@ class EfficientDet(nn.Module):
         if train:
             return self.loss(classification, regression, anchors, annotations)
 
-        transformed_anchors = self.regress(anchors, regression)
-        transformed_anchors = self.clips(transformed_anchors, batch)
-        score = torch.max(classification, dim=2, keepdim=True)[0]
-        threshold_score = (score > self.classification_threshold)[0, :, 0]
+        else:
+            transformed_anchors = self.regressBox(anchors, regression)
+            transformed_anchors = self.clipBox(transformed_anchors, batch)
+            score = torch.max(classification, dim=2, keepdim=True)[0]
+            threshold_score = (score > self.classification_threshold)[0, :, 0]
 
-        if threshold_score.sum() == 0:
-            return [torch.zeros(0), torch.zeros(0), torch.zeros(0, 4)]
+            if threshold_score.sum() == 0:
+                return [torch.zeros(0), torch.zeros(0), torch.zeros(0, 4)]
 
-        classification = classification[:, threshold_score, :]
-        transformed_anchors = transformed_anchors[:, threshold_score, :]
-        score = score[:, threshold_score, :]
+            classification = classification[:, threshold_score, :]
+            transformed_anchors = transformed_anchors[:, threshold_score, :]
+            score = score[:, threshold_score, :]
 
-        nms_idx = nms(torch.cat([transformed_anchors, score], dim=2)[0, :, :], 0.6)
-        nms_scores, nms_class = classification[0, nms_idx, :].max(dim=1)
-        
-        return [nms_scores, nms_class, transformed_anchors[0, nms_idx, :]]
+            nms_idx = nms(torch.cat([transformed_anchors, score], dim=2)[0, :, :], 0.5)
+            nms_scores, nms_class = classification[0, nms_idx, :].max(dim=1)
+            
+            return [nms_scores, nms_class, transformed_anchors[0, nms_idx, :]]
