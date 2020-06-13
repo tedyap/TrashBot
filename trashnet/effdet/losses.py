@@ -1,7 +1,7 @@
 """
 Focal Loss for EfficientDet
 
-The code is copied as is from a PyTorch implementation
+The code is modified from a PyTorch implementation
 of RetinaNet where FocalLoss was first introduced
 
 https://arxiv.org/abs/1708.02002
@@ -52,11 +52,11 @@ class FocalLoss(nn.Module):
         anchor_ctr_x = anchor[:, 0] + 0.5 * anchor_widths
         anchor_ctr_y = anchor[:, 1] + 0.5 * anchor_heights
 
-        for j in range(bs):
-            classification = classifications[j, :, :]
-            regression = regressions[j, :, :]
+        for b in range(bs):
+            classification = classifications[b, :, :]
+            regression = regressions[b, :, :]
 
-            bbox_annotation = annotations[j, :, :]
+            bbox_annotation = annotations[b, :, :]
             bbox_annotation = bbox_annotation[bbox_annotation[:, 4] != -1]
 
             if bbox_annotation.shape[0] == 0:
@@ -97,7 +97,7 @@ class FocalLoss(nn.Module):
 
             bce = -(targets * torch.log(classification) + (
                 1. - targets) * torch.log(1. - classification))
-            cls_loss = focal_weight + bce
+            cls_loss = focal_weight * bce
 
             zeros = torch.zeros(cls_loss.shape)
             if torch.cuda.is_available():
@@ -132,12 +132,10 @@ class FocalLoss(nn.Module):
                 targets = torch.stack((targets_dx, targets_dy, targets_dw, targets_dh))
                 targets = targets.t()
 
+                norm = torch.Tensor([[0.1, 0.1, 0.2, 0.2]])
                 if torch.cuda.is_available():
-                    targets = targets / torch.Tensor([[0.1, 0.1, 0.2, 0.2]]).cuda()
-                else:
-                    targets = targets / torch.Tensor([[0.1, 0.1, 0.2, 0.2]])
-
-                negative_idxs = 1 + (~positive_idxs)  # noqa: F841
+                    norm = norm.cuda()
+                targets = targets / norm
 
                 regression_diff = torch.abs(targets - regression[positive_idxs, :])
 
