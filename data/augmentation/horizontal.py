@@ -5,8 +5,6 @@ import sys
 import os
 import random
 import numpy as np
-import cv2 as cv
-import matplotlib.pyplot as plt
 
 path = os.path.join(os.path.relpath("."), "augmentations")
 sys.path.append(path)
@@ -33,4 +31,3 @@ class RandomHorizontalFlip(object):
             bbox[:, 2] += w
         
         return image, bbox
-        
