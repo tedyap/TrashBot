@@ -3,10 +3,10 @@
 
 import random
 
-from horizontal import RandomHorizontalFlip  # noqa:F401
-from scale import RandomScale  # noqa:F401
-from rotate import RandomRotate  # noqa:F401
-from translate import RandomTranslate  # noqa:F401
+from .horizontal import RandomHorizontalFlip  # noqa:F401
+from .scale import RandomScale  # noqa:F401
+from .rotate import RandomRotate  # noqa:F401
+from .translate import RandomTranslate  # noqa:F401
 
 class Pipeline(object):
     """

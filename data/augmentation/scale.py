@@ -7,7 +7,7 @@ import random
 import numpy as np
 import cv2 as cv
 
-from utils import clip_box
+from .utils import clip_box
 
 path = os.path.join(os.path.relpath("."), "augmentations")
 sys.path.append(path)
