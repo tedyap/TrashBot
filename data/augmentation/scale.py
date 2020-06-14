@@ -18,11 +18,19 @@ class RandomScale(object):
 
     def __init__(self, scale=0.2, diff=False):
         self.scale = scale
+        if type(self.scale) == tuple:
+            assert len(self.scale) == 2, "Invalid range"
+            assert self.scale[0] > -1, "Scale factor can't be less than -1"
+            assert self.scale[1] > -1, "Scale factor can't be less than -1"
+        else:
+            assert self.scale > 0, "Please input a positive float"
+            self.scale = (max(-1, -self.scale), self.scale)
+        
         self.diff = diff
 
     def __call__(self, image, bbox):
         shape = image.shape
-        if self.diif:
+        if self.diff:
             scale_x = random.uniform(*self.scale)
             scale_y = random.uniform(*self.scale)
         else:
@@ -36,6 +44,7 @@ class RandomScale(object):
         bbox[:, :4] *= [resize_x, resize_y, resize_x, resize_y]
 
         canvas = np.zeros(shape, dtype=np.uint8)
+
         y_lim = int(min(resize_y, 1) * shape[0])
         x_lim = int(min(resize_x, 1) * shape[1])
 

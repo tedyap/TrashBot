@@ -8,3 +8,4 @@ exclude = .git, .vscode
 per-file-ignores = docs/conf.py:F401,
                    trashnet/train.py:E501
                    trashnet/test.py:E501
+                   data/augmentation/test.py:F401

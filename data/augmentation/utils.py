@@ -4,7 +4,7 @@
 import cv2 as cv
 import numpy as np
 
-def draw_rectange(image, coords, color=None):
+def draw_rectangle(image, coords, color=None):
     """
     """
 
