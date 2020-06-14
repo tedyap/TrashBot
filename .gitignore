@@ -144,3 +144,9 @@ cython_debug/
 _build
 _static
 _templates
+
+# JSON files
+*.json
+
+# *.jpg files
+*.jpg
