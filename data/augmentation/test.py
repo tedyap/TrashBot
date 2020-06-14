@@ -3,7 +3,6 @@
 
 import cv2 as cv
 import numpy as np
-import pickle as pkl
 import matplotlib.pyplot as plt
 
 from horizontal import RandomHorizontalFlip
