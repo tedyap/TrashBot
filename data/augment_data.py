@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 
 from collections import defaultdict
 
+from generate_json import get_json
 from augmentation.augment import Pipeline
 from augmentation.horizontal import RandomHorizontalFlip
 from augmentation.scale import RandomScale, Scale
@@ -31,49 +32,52 @@ def main():
     with open(jsonfile) as fp:
         data = json.load(fp)
     
-    # cat2idx, idx2cat = {}, {}
-    # idx2image, image2idx = {}, {}
+    cat2idx, idx2cat = {}, {}
+    idx2image, image2idx = {}, {}
     image2annotations = defaultdict(list)
     filenames, paths = [], []
+    augmented_images, augmented_boxes = [], defaultdict(list)
 
     images = data['images']
-    # categories = data['categories']
+    categories = data['categories']
     annotations = data['annotations']
 
+    print(len(images), len(annotations))
     for image in images:
-        # idx2image[image['id']] = image['file_name']
-        # image2idx[image['file_name']] = image['id']
+        idx2image[image['id']] = image['file_name']
+        image2idx[image['file_name']] = image['id']
         filename = image['file_name'].split('/')[-1]
         filenames.append(filename)
 
-    # for category in categories:
-    #     idx2cat[category['id']] = category['name']
-    #     cat2idx[category['name']] = category['id']
+    base_image_idx = image['id']
+    for category in categories:
+        idx2cat[category['id']] = category['name']
+        cat2idx[category['name']] = category['id']
 
     for annotation in annotations:
-        image_id = annotation['image_id']
+        current_annotation_idx = annotation['id']
         bbox2cat = annotation['bbox'] + [annotation['category_id']]
         bbox = [float(b) for b in bbox2cat]
-        image2annotations[image_id].append(bbox)
+        image2annotations[annotation['image_id']].append(bbox)
         
     image_folder = datapath + '/img/'
     for filename in filenames:
         path = os.path.join(image_folder, filename)
         paths.append(path)
 
-    if not os.path.isdir(outputdir):
-        os.makedirs(outputdir)
+    # if not os.path.isdir(outputdir):
+    #     os.makedirs(outputdir)
 
-    image_output = os.path.join(outputdir, 'images')
-    annotations_output = os.path.join(outputdir, 'annotations')
+    image_output = os.path.join(outputdir, 'img')
+    # annotations_output = os.path.join(outputdir, 'annotations')
 
-    if os.path.isdir(image_output):
-        shutil.rmtree(image_output)
-    os.makedirs(image_output)
+    # if os.path.isdir(image_output):
+    #     shutil.rmtree(image_output)
+    # os.makedirs(image_output)
 
-    if os.path.isdir(annotations_output):
-        shutil.rmtree(annotations_output)
-    os.makedirs(annotations_output)
+    # if os.path.isdir(annotations_output):
+    #     shutil.rmtree(annotations_output)
+    # os.makedirs(annotations_output)
 
     for idx in range(len(paths)):
         image, bbox = augment_image(paths[idx], np.array(image2annotations[idx]))
@@ -82,20 +86,34 @@ def main():
         augmented_image = os.path.join(image_output, name)
         try:
             cv.imwrite(augmented_image, image)
+            augmented_images.append(augmented_image)
+            augmented_boxes[idx].append(bbox)
         except Exception as e:
             logger.info(e)
             continue
 
+    for idx in range(len(augmented_images)):
+        current_annotation_idx = get_json(base_image_idx, augmented_images[idx], current_annotation_idx, augmented_boxes[idx], jsonfile)
+        base_image_idx += 1
+        
+    with open(jsonfile) as fp:
+        x = json.load(fp)
+    
+    img = x['images']
+    ann = x['annotations']
+    print(len(img), len(ann))
+    
 def augment_image(path, bbox, viz: bool = False):
-    image = cv.imread(path)[:, :, ::-1]
-    if viz:
-        plt.imshow(draw_rectangle(image, bbox))
-        plt.show()
+    """
+    """
 
-    transforms = Pipeline([RandomHorizontalFlip(0.7), Scale(0.2, 0.2), RandomRotate((2, 2))])
+    image = cv.imread(path)[:, :, ::-1]
+    transforms = Pipeline([RandomHorizontalFlip(1), Scale(0.2, 0.2), RandomRotate((2, 2))])
     new_image, new_bbox = transforms(image, bbox)
     
     if viz:
+        plt.imshow(draw_rectangle(image, bbox))
+        plt.show()
         plt.imshow(draw_rectangle(image, bbox))
         plt.show()
     
