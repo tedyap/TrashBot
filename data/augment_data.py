@@ -46,7 +46,6 @@ def main():
     last_image_idx = image['id']
 
     for annotation in annotations:
-        # print(annotation)
         bbox2cat = annotation['bbox'] + [annotation['category_id']]
         bbox = [float(b) for b in bbox2cat]
         image2annotations[annotation['image_id']].append(bbox)
@@ -58,8 +57,6 @@ def main():
         path = os.path.join(image_folder, filename)
         paths.append(path)
 
-    print(len(paths))
-    # print(paths)
     image_output = os.path.join(outputdir, 'img')
 
     for idx in range(len(paths)):
@@ -75,19 +72,11 @@ def main():
             logger.info(e)
             continue
 
-    for idx in range(len(augmented_images)):
-        last_annotation_idx = get_json(last_image_idx, augmented_images[idx], last_annotation_idx, augmented_boxes[idx], jsonfile)
+    for idx in range(len(paths)):
+        last_annotation_idx = get_json(last_image_idx, augmented_images[idx], last_annotation_idx, augmented_boxes[idx], jsonfile)  # noqa:#E501
         last_image_idx += 1
-        
-    with open(jsonfile) as fp:
-        x = json.load(fp)
     
-    img = x['images']
-    ann = x['annotations']
-    # print(img)
-    # print(len(ann))
-    
-def augment_image(path, bbox, viz: bool = False):
+def augment_image(path, bbox, transforms, random: bool = True, viz: bool = False):
     """
     """
 
