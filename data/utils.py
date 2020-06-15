@@ -6,6 +6,8 @@ import os
 import json
 import numpy as np
 import glob
+
+from collections import defaultdict
 from pathlib import Path
 from typing import Tuple
 
@@ -112,3 +114,22 @@ def convert_image(id: int, name: str, jsons, category: dict, base_dir: str,
     } for idx, (obj, bbox) in enumerate(zip(objects, bbox))]
 
     return base_coco, annotations
+
+def annotation_split(annotations, train, valid, test):
+    """
+    """
+
+    train_annotions, valid_annotations, test_annotations = [], [], []
+    annotations2images = defaultdict(list)
+
+    for annotation in annotations:
+        annotations2images[annotation["image_id"]].append(annotation)
+    
+    for image in train:
+        train_annotions.append(annotations2images[image["id"]])
+    for image in valid:
+        valid_annotations.append(annotations2images[image["id"]])
+    for image in test:
+        test_annotations.append(annotations2images[image["id"]])
+    
+    return train_annotions, valid_annotations, test_annotations 
