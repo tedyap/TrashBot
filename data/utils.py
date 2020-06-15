@@ -56,7 +56,7 @@ def get_all_annotation_files(base_dir: str) -> Tuple[list, list]:
     ann_path = os.path.join(base_dir, "*.json")
     annotation_files = glob.glob(ann_path)
 
-    image_files = [".".join(name.split(".")[:-1]) for name in annotation_files]
+    image_files = [name[:-5] for name in annotation_files]
     jsons = []
     for files in annotation_files:
         with open(files, 'r') as f:
@@ -81,7 +81,7 @@ def convert_image(id: int, name: str, jsons, category: dict, base_dir: str,
     Returns:
         tuple containing annotation for image info, objects
     """
-    fname = name if not image_name else Path(name)
+    fname = name if not image_name else Path(name).name
     base_coco = {
         "id": id,
         "width": jsons['size']['width'],
@@ -97,8 +97,8 @@ def convert_image(id: int, name: str, jsons, category: dict, base_dir: str,
     bbox = [[
         exterior.min(axis=0)[0],
         exterior.min(axis=0)[1],
-        exterior.max(axis=0)[0],
-        exterior.max(axis=0)[1]
+        exterior.max(axis=0)[0] - exterior.min(axis=0)[0],
+        exterior.max(axis=0)[1] - exterior.min(axis=0)[1],
     ] for exterior in exteriors]
 
     annotations = [{

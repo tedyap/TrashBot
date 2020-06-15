@@ -15,7 +15,7 @@ import argparse
 from utils import get_all_annotation_files, get_categories, convert_image
 from utils import NpEncoder
 
-def convert(meta: str, base_dir: str, output: str, image_name: bool):
+def convert(meta: str, base_dir: str, output: str, image_name: bool = False):
     """
     Convert from supervisely to COCO
 
@@ -72,6 +72,7 @@ def convert(meta: str, base_dir: str, output: str, image_name: bool):
     with open(output, 'w') as f:
         logging.debug("Saving as JSON")
         json.dump(coco, f, cls=NpEncoder)
+    return coco
     
 def argument_parser(epilog: str = None) -> argparse.ArgumentParser:
     """
@@ -91,7 +92,7 @@ def argument_parser(epilog: str = None) -> argparse.ArgumentParser:
     parser.add_argument("--meta", "-m", help="Path to meta.json file")
     parser.add_argument("--annotations", "-a", help="Annotations base dir")
     parser.add_argument("--output", "-o", help="Output json filename")
-    parser.add_argument("-image_name", '-n', action="store_true",
+    parser.add_argument("--image_name", '-n', action="store_true",
                         help="Save only filename(without absolute path)")
     return parser
 
@@ -104,12 +105,14 @@ def main():
     meta = args.meta
     base_dir = args.annotations
     savefile = args.output
-    # flag = args.image_name
+    flag = args.image_name
 
     logger.info("Conversion started")
+
     try:
-        convert(meta=meta, base_dir=base_dir, output=savefile, image_name=False)
+        coco = convert(meta=meta, base_dir=base_dir, output=savefile, image_name=flag)
         logger.info('Finished converting. Check the output file for results.')
+        print("Finished")
     except Exception:
         logger.error('Could not convert. Please refer to the logs for more details')
     
