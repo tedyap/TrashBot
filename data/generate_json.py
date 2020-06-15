@@ -32,7 +32,7 @@ def get_json(current_idx, image, annotation_idx, annotations, output):
             "segmentation": [],
             "area": bbox[2] * bbox[3],
             "bbox": bbox,
-            "category": category,
+            "category_id": category,
             "iscrowd": 0
         }
         annotation_idx += 1
