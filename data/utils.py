@@ -6,6 +6,8 @@ import os
 import json
 import numpy as np
 import glob
+import random
+import math
 
 from collections import defaultdict
 from pathlib import Path
@@ -115,6 +117,39 @@ def convert_image(id: int, name: str, jsons, category: dict, base_dir: str,
 
     return base_coco, annotations
 
+def dataset_split(images, train_split, valid_split, test_split):
+    """
+    """
+    random.seed(42)
+    num_images = len(images)
+    val_idx = math.floor(train_split * num_images)
+    test_idx = num_images - math.floor(test_split * num_images)
+
+    train_ds = images[: val_idx]
+    valid_ds = images[val_idx: test_idx]
+    test_ds = images[test_idx:]
+
+    return train_ds, valid_ds, test_ds
+
+def create_json(base_json, images, annotations, output, filename):
+
+    categories = base_json["categories"]
+    info = base_json["info"]
+    licenses = base_json["licenses"]
+
+    coco = {
+        "info": info,
+        "licenses": licenses,
+        "categories": categories,
+        "images": images,
+        "annotations": annotations
+    }
+
+    output_file = os.path.join(output, filename)
+    print(output_file)
+    with open(output_file, 'w') as fp:
+        json.dump(coco, fp, cls=NpEncoder)
+
 def annotation_split(annotations, train, valid, test):
     """
     """
@@ -132,4 +167,4 @@ def annotation_split(annotations, train, valid, test):
     for image in test:
         test_annotations.append(annotations2images[image["id"]])
     
-    return train_annotions, valid_annotations, test_annotations 
+    return train_annotions, valid_annotations, test_annotations
