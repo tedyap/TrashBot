@@ -72,7 +72,6 @@ def convert(meta: str, base_dir: str, output: str, image_name: bool = False):
     with open(output, 'w') as f:
         logging.debug("Saving as JSON")
         json.dump(coco, f, cls=NpEncoder)
-    return coco
     
 def argument_parser(epilog: str = None) -> argparse.ArgumentParser:
     """
@@ -110,9 +109,8 @@ def main():
     logger.info("Conversion started")
 
     try:
-        coco = convert(meta=meta, base_dir=base_dir, output=savefile, image_name=flag)
+        convert(meta=meta, base_dir=base_dir, output=savefile, image_name=flag)
         logger.info('Finished converting. Check the output file for results.')
-        print("Finished")
     except Exception:
         logger.error('Could not convert. Please refer to the logs for more details')
     

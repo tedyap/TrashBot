@@ -146,7 +146,6 @@ def create_json(base_json, images, annotations, output, filename):
     }
 
     output_file = os.path.join(output, filename)
-    print(output_file)
     with open(output_file, 'w') as fp:
         json.dump(coco, fp, cls=NpEncoder)
 

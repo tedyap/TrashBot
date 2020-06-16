@@ -59,12 +59,14 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+printf "Setting up directory structure\n"
 mkdir -p ${output}/annotations
 mkdir -p ${output}/dataset
 
 cp ${data_path}/meta.json ${output}/
 
 # Copy all images and annotation files to a flat folder structure
+printf "Flattening dataset for conversion to MS-COCO\n"
 for i in "${arr[@]}"
 do
     cp ${data_path}/"$i"/img/*.jpg ${output}/
@@ -72,11 +74,14 @@ do
 done
 
 # Create json format annotation file for all images
+printf "Converting from supervise.ly format to COCO\n"
 python data/supervisely2coco.py --meta ${output}/meta.json --annotations ${output}/annotations --output ${output}/coco.json --image_name
 
 # Train/Test/Val split
+printf "Train/Test/Val split on the COCO dataset...\n"
 python data/create_coco.py --data ${output} --cocofile coco.json --output ${output}/dataset
 
+printf "Moving files into place...\n"
 mv ${output}/train/ ${output}/dataset
 mv ${output}/valid/ ${output}/dataset
 mv ${output}/test/ ${output}/dataset
@@ -84,3 +89,5 @@ mv ${output}/test/ ${output}/dataset
 mv ${output}/dataset/instances_train.json ${output}/dataset/train
 mv ${output}/dataset/instances_valid.json ${output}/dataset/valid
 mv ${output}/dataset/instances_test.json ${output}/dataset/test
+
+printf "All done. The COCO formatted dataset can be found at ${output}\n"
