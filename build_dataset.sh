@@ -32,8 +32,8 @@ declare -a arr=("aluminum cans" "aluminum foil crumpled" "aluminum food containe
                 "plastic bottle small" "plastic clear clamshell" "plastic clear lid"
                 "plastic clear cup empty" "plastic clear cup full" "plastic plate"
                 "plastic food container" "plastic food container full" "plastic straw"
-                "plastic utensil" "product packaging" "product wrapper" "shredded paper"
-                "small scrap" "styrofoam cup" "styrofoam food container" "tea bag"
+                "plastic utensil" "product packaging" "shredded paper"
+                "small scrap" "styrofoam cup" "styrofoam food container" 
                 "styrofoam plate" "tetrapak carton"
                 )
 
@@ -60,8 +60,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 printf "Setting up directory structure\n"
-mkdir -p ${output}/annotations
-mkdir -p ${output}/dataset
+mkdir -p ${output}/ann
+mkdir -p ${output}/dataset/images
+mkdir -p ${output}/dataset/annotations
 
 cp ${data_path}/meta.json ${output}/
 
@@ -70,24 +71,24 @@ printf "Flattening dataset for conversion to MS-COCO\n"
 for i in "${arr[@]}"
 do
     cp ${data_path}/"$i"/img/*.jpg ${output}/
-    cp ${data_path}/"$i"/ann/*.json ${output}/annotations
+    cp ${data_path}/"$i"/ann/*.json ${output}/ann
 done
 
 # Create json format annotation file for all images
 printf "Converting from supervise.ly format to COCO\n"
-python data/supervisely2coco.py --meta ${output}/meta.json --annotations ${output}/annotations --output ${output}/coco.json --image_name
+python data/supervisely2coco.py --meta ${output}/meta.json --annotations ${output}/ann --output ${output}/coco.json --image_name
 
 # Train/Test/Val split
 printf "Train/Test/Val split on the COCO dataset...\n"
 python data/create_coco.py --data ${output} --cocofile coco.json --output ${output}/dataset
 
 printf "Moving files into place...\n"
-mv ${output}/train/ ${output}/dataset
-mv ${output}/valid/ ${output}/dataset
-mv ${output}/test/ ${output}/dataset
+mv ${output}/train/ ${output}/dataset/images
+mv ${output}/valid/ ${output}/dataset/images
+mv ${output}/test/ ${output}/dataset/images
 
-mv ${output}/dataset/instances_train.json ${output}/dataset/train
-mv ${output}/dataset/instances_valid.json ${output}/dataset/valid
-mv ${output}/dataset/instances_test.json ${output}/dataset/test
+mv ${output}/dataset/instances_train.json ${output}/dataset/annotations
+mv ${output}/dataset/instances_valid.json ${output}/dataset/annotations
+mv ${output}/dataset/instances_test.json ${output}/dataset/annotations
 
 printf "All done. The COCO formatted dataset can be found at ${output}\n"

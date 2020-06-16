@@ -153,17 +153,20 @@ def annotation_split(annotations, train, valid, test):
     """
     """
 
-    train_annotions, valid_annotations, test_annotations = [], [], []
+    train_annotations, valid_annotations, test_annotations = [], [], []
     annotations2images = defaultdict(list)
 
     for annotation in annotations:
         annotations2images[annotation["image_id"]].append(annotation)
     
     for image in train:
-        train_annotions.append(annotations2images[image["id"]])
+        train_annotations.append(annotations2images[image["id"]])
     for image in valid:
         valid_annotations.append(annotations2images[image["id"]])
     for image in test:
         test_annotations.append(annotations2images[image["id"]])
     
-    return train_annotions, valid_annotations, test_annotations
+    train_annotations = [inner for lst in train_annotations for inner in lst]
+    valid_annotations = [inner for lst in valid_annotations for inner in lst]
+    test_annotations = [inner for lst in test_annotations for inner in lst]
+    return train_annotations, valid_annotations, test_annotations
