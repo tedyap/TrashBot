@@ -9,9 +9,8 @@ import cv2 as cv
 from effdet.data.dataset import Coco
 from effdet.data.transforms import Normalize
 from effdet.data.transforms import Resize
-from effdet.data.config import CLASSES
-from effdet.data.config import colors
-
+from constants import classes as CLASSES
+from constants import colors
 import torch
 from torchvision import transforms
 
@@ -24,7 +23,7 @@ def argument_parser(epilog: str = None):
 
     parser.add_argument("--image_size", type=int, default=512, help="The height and width for images passed to the network")
     parser.add_argument("--cls_threshold", type=float, default=0.5, help="Threshold for classification score")
-    parser.add_argument("--nms_threshold", type=float, default=0.5, help="Threshold for regressor boxes")
+    parser.add_argument("--nms_threshold", type=float, default=0.2, help="Threshold for regressor boxes")
     parser.add_argument("--path", "-p", type=str, help="Path to root folder of data in MS-COCO format")
     parser.add_argument("--pretrained", type=str, default="models/trashnet.pth", help="Path to trained model")
     parser.add_argument("--output", type=str, default="predictions")
@@ -82,3 +81,4 @@ def test(args):
 if __name__ == "__main__":
     arg = argument_parser()
     test(arg)
+
