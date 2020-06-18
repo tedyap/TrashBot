@@ -1,0 +1,190 @@
+item {
+    name: "Aluminum Can",
+    id: 1,
+    display_name: "Aluminum Can"
+}
+item {
+    name: "Aluminum Foil",
+    id: 2,
+    display_name: "Aluminum Foil"
+}
+item {
+    name: "Aluminum Food Container",
+    id: 3,
+    display_name: "Aluminum Food Container"
+}
+item {
+    name: "Banana Peel",
+    id: 4,
+    display_name: "Banana Peel"
+}
+item {
+    name: "Bubble Wrap",
+    id: 5,
+    display_name: "Bubble Wrap"
+}
+item {
+    name: "Cardboard Box",
+    id: 6,
+    display_name: "Cardboard Box"
+}
+item {
+    name: "Clear Plastic Lid",
+    id: 7,
+    display_name: "Clear Plastic Lid"
+}
+item {
+    name: "Clear Plastic Straw Lid",
+    id: 8,
+    display_name: "Clear Plastic Straw Lid"
+}
+item {
+    name: "Coffee Cup",
+    id: 9,
+    display_name: "Coffee Cup"
+}
+item {
+    name: "Coffee Cup Lid",
+    id: 10,
+    display_name: "Coffee Cup Lid"
+}
+item {
+    name: "Condiment Packet",
+    id: 11,
+    display_name: "Condiment Packet"
+}
+item {
+    name: "Food Scrap",
+    id: 12,
+    display_name: "Food Scrap"
+}
+item {
+    name: "Glass Bottle",
+    id: 13,
+    display_name: "Glass Bottle"
+}
+item {
+    name: "Nitrile Gloves",
+    id: 14,
+    display_name: "Nitrile Gloves"
+}
+item {
+    name: "Orange Peel",
+    id: 15,
+    display_name: "Orange Peel"
+}
+item {
+    name: "Paper Bag",
+    id: 16,
+    display_name: "Paper Bag"
+}
+item {
+    name: "Paper Card",
+    id: 17,
+    display_name: "Paper Card"
+}
+item {
+    name: "Paper Crumpled",
+    id: 18,
+    display_name: "Paper Crumpled"
+}
+item {
+    name: "Paper Cup",
+    id: 19,
+    display_name: "Paper Cup"
+}
+item {
+    name: "Paper Food Box",
+    id: 20,
+    display_name: "Paper Food Box"
+}
+item {
+    name: "Paper Napkin",
+    id: 21,
+    display_name: "Paper Napkin"
+}
+item {
+    name: "Paper Newspaper",
+    id: 22,
+    display_name: "Paper Newspaper"
+}
+item {
+    name: "Paper Plate/Tray/Bowl",
+    id: 23,
+    display_name: "Paper Plate/Tray/Bowl"
+}
+item {
+    name: "Paper Scrap",
+    id: 24,
+    display_name: "Paper Scrap"
+}
+item {
+    name: "Plastic Bag",
+    id: 25,
+    display_name: "Plastic Bag"
+}
+item {
+    name: "Plastic Bottle",
+    id: 26,
+    display_name: "Plastic Bottle"
+}
+item {
+    name: "Plastic Clear Clamshell",
+    id: 27,
+    display_name: "Plastic Clear Clamshell"
+}
+item {
+    name: "Plastic Clear Lid",
+    id: 28,
+    display_name: "Plastic Clear Lid"
+}
+item {
+    name: "Plastic Cup",
+    id: 29,
+    display_name: "Plastic Cup"
+}
+item {
+    name: "Plastic Food Wrapper HDPE_Film",
+    id: 30,
+    display_name: "Plastic Food Wrapper HDPE_Film"
+}
+item {
+    name: "Plastic Food Wrapper Mylar",
+    id: 31,
+    display_name: "Plastic Food Wrapper Mylar"
+}
+item {
+    name: "Plastic Plate/Tray/Bowl",
+    id: 32,
+    display_name: "Plastic Plate/Tray/Bowl"
+}
+item {
+    name: "Plastic Straw",
+    id: 33,
+    display_name: "Plastic Straw"
+}
+item {
+    name: "Plastic Utensil",
+    id: 34,
+    display_name: "Plastic Utensil"
+}
+item {
+    name: "Styrofoam Cup",
+    id: 35,
+    display_name: "Styrofoam Cup"
+}
+item {
+    name: "Styrofoam Food Container",
+    id: 36,
+    display_name: "Styrofoam Food Container"
+}
+item {
+    name: "Styrofoam Plate/Tray",
+    id: 37,
+    display_name: "Styrofoam Plate/Tray"
+}
+item {
+    name: "TetraPak Carton",
+    id: 38,
+    display_name: "TetraPak Carton"
+}

@@ -77,12 +77,21 @@ mkdir -p "${DATASET_DIR}"
 
 cd "${DATASET_DIR}"
 
-## Downloading data
-curl -L "https://app.roboflow.ai/ds/L3nnF5sECW?key=V9TYXibLCN" > coco.zip
-unzip coco.zip
-mv coco.zip "${ARCHIVE_DIR}"
+## Prepare data
+unzip "${OBJ_DET_DIR}"/dataset.zip
+mv dataset/images/train .
+mv dataset/images/valid .
+mv dataset/images/test .
 
-mkdir "${TFRECORDS_DIR}" && cd "${TFRECORDS_DIR}"
+mv dataset/annotations/instances_train.json train
+mv dataset/annotations/instances_valid.json valid
+mv dataset/annotations/instances_test.json test
+
+mv "${OBJ_DET_DIR}"/dataset.zip "${ARCHIVE_DIR}"
+
+# mv "${OBJ_DET_DIR}"/labelmap.pbtxt "${DATASET_DIR}"/trash_label_map.pbtxt
+
+mkdir -p "${TFRECORDS_DIR}" && cd "${TFRECORDS_DIR}"
 curl -L "https://app.roboflow.ai/ds/FWaxjuc7VD?key=9JHOfJ01C3" > tfrecords.zip
 unzip tfrecords.zip
 
