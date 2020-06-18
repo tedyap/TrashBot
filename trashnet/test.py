@@ -26,7 +26,7 @@ def argument_parser(epilog: str = None):
     parser.add_argument("--cls_threshold", type=float, default=0.5, help="Threshold for classification score")
     parser.add_argument("--nms_threshold", type=float, default=0.5, help="Threshold for regressor boxes")
     parser.add_argument("--path", "-p", type=str, help="Path to root folder of data in MS-COCO format")
-    parser.add_argument("--pretrained", type=str, default="tensorboard/", help="Path to trained model")
+    parser.add_argument("--pretrained", type=str, default="models/trashnet.pth", help="Path to trained model")
     parser.add_argument("--output", type=str, default="predictions")
 
     arg = parser.parse_args()
@@ -54,8 +54,8 @@ def test(args):
             boxes /= scale
 
             if boxes.shape[0] > 0:
-                info = test_ds.coco.loadImgs(test_ds.image_ids[idx])[0]
-                path = os.path.join(test_ds.root, 'images', test_ds.data, info['file_name'])
+                info = test_ds.coco.loadImgs(test_ds.imageIds[idx])[0]
+                path = os.path.join(test_ds.root_dir, 'images', test_ds.set, info['file_name'])
                 output_image = cv.imread(path)
 
                 for box_id in range(boxes.shape[0]):
@@ -71,7 +71,7 @@ def test(args):
                     cv.rectangle(output_image, (xmin, ymin), (xmin + text[0] + 3, ymin + text[1] + 4), color, -1)
 
                     cv.putText(
-                        output_image, CLASSES[label] + ' : %.2f' & prob,
+                        output_image, CLASSES[label] + ' : %.2f' % prob,
                         (xmin, ymin + text[1] + 4), cv.FONT_HERSHEY_PLAIN, 1,
                         (255, 255, 255), 1
                     )
