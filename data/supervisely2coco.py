@@ -1,10 +1,10 @@
 ##
-# Modified version of scripts written by Caio Marcellos and Sai Peri
+# Modified version of scripts written by Caio Marcellos
 # Refer to README for details
 ##
 
 """
-Convert from Supervisely to MS-COCO format
+Convert from Supervisely to MS-COCO format.
 """
 
 import json
@@ -15,9 +15,9 @@ import argparse
 from utils import get_all_annotation_files, get_categories, convert_image
 from utils import NpEncoder
 
-def convert(meta: str, base_dir: str, output: str, image_name: bool = False):
+def convert(meta: str, base_dir: str, output: str, image_name: bool = False) -> None:
     """
-    Convert from supervisely to COCO
+    Convert from supervisely to COCO.
 
     Args:
         meta (str): path to meta.json file
@@ -26,9 +26,8 @@ def convert(meta: str, base_dir: str, output: str, image_name: bool = False):
         iamge_name (bool): boolean indicating path to save
     
     Returns:
-        json describing input dataset in MS-COCO format
+        None
     """
-
     filenames, jsons = get_all_annotation_files(base_dir)
     catmap = get_categories(meta)
 
@@ -55,7 +54,7 @@ def convert(meta: str, base_dir: str, output: str, image_name: bool = False):
             "year": datetime.now().strftime("%Y"),
             "version": "0.1",
             "description": "Converted from supervisely to coco",
-            "contributor": "caiofcm + speri203 + jsaurabh",
+            "contributor": "caiofcm + jsaurabh",
             "url": "",
             "date_created": datetime.now().strftime("%Y/%m/%d%H:%M:%S")
         },
@@ -96,10 +95,12 @@ def argument_parser(epilog: str = None) -> argparse.ArgumentParser:
     return parser
 
 def main():
+    """
+    Parse command line inputs and run through the conversion loop.
+    """
     logger = logging.getLogger('logger')
     parser = argument_parser()
     args = parser.parse_args()
-    print(args)
 
     meta = args.meta
     base_dir = args.annotations

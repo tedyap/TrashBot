@@ -1,3 +1,7 @@
+"""
+Classes and color values for COCO categories.
+"""
+
 CLASSES = [
     "person", "bicycle", "car", "motorcycle", "airplane", "bus",
     "train", "truck", "boat", "traffic light", "fire hydrant",

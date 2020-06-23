@@ -1,8 +1,8 @@
 """
+EfficientDet model definition using EfficientNet, BiFPN
 """
 
 import math
-
 import torch
 import torch.nn as nn
 
@@ -13,6 +13,17 @@ from .losses import FocalLoss
 
 class EfficientDet(nn.Module):
     """
+    EfficientDet as an nn.Module
+
+    Args:
+        n_anchors (int): Number of default anchors
+        n_classes (int): Number of classes to detect
+        compound_coeff (int): Compound scaling coefficient(possible values from 0...7)
+        x: Input data. CUDA or not depending on host device
+        
+    Returns:
+        tuple containing thresholded bounding box scores, detected classes
+        and transformed bounding boxes
     """
     def __init__(self, n_anchors: int = 9, n_classes: int = 20, compound_coef: int = 0):
         super(EfficientDet, self).__init__()
@@ -67,6 +78,7 @@ class EfficientDet(nn.Module):
 
     def freeze(self):
         """
+        Fix Batchnorm during training
         """
         for m in self.modules():
             if isinstance(m, nn.BatchNorm2d):
@@ -74,6 +86,8 @@ class EfficientDet(nn.Module):
     
     def forward(self, x):
         """
+        Forward pass of input through EfficientDet. Returns thresholded
+        box scores, labels and bounding boxes
         """
         if len(x) == 2:
             train = True

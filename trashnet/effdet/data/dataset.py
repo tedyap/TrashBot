@@ -1,18 +1,31 @@
 """
+Helper class for creating COCO datasets.
 """
 
 import os
 import cv2 as cv
 import numpy as np
-
 import torch
+import torchvision
+
 from pycocotools.coco import COCO
 from torch.utils.data import Dataset
 
 class Coco(Dataset):
     """
+    Create a PyTorch dataset from given data.
+
+    Args:
+        root (str): Path to root directory of data
+        data (str): Set of data to be considered
+        transforms (torchvision.transforms): transforms object composed of
+                                             user defined image transforms
+    
+    Returns:
+        Coco dataset object from input data
     """
-    def __init__(self, root, data='train2017', transforms=None):
+    def __init__(self, root: str, data: str = "train2017",
+                 transforms: torchvision.transforms = None):
         self.root_dir = root
         self.set = data
         self.transforms = transforms
@@ -29,9 +42,6 @@ class Coco(Dataset):
         self.load_classes()
     
     def __getitem__(self, idx):
-        """
-        """
-
         image = self.load_image(idx)
         annotation = self.load_annotations(idx)
         out = {
@@ -47,9 +57,6 @@ class Coco(Dataset):
         return len(self.imageIds)
 
     def load_classes(self):
-        """
-        """
-
         categories = self.coco.loadCats(self.coco.getCatIds())
         categories.sort(key=lambda x: x['id'])
 
@@ -62,23 +69,15 @@ class Coco(Dataset):
             self.labels_rev[v] = k
 
     def get_num_classes(self):
-        """
-        """
         return self.num_classes
     
     def label2coco(self, label):
-        """
-        """
         return self.labels[label]
 
     def coco2label(self, coco_label):
-        """
-        """
         return self.labels_inv[coco_label]
 
     def load_annotations(self, idx):
-        """
-        """
         annotationIds = self.coco.getAnnIds(imgIds=self.imageIds[idx], iscrowd=False)
         default = np.zeros((0, 5))
 
@@ -102,9 +101,6 @@ class Coco(Dataset):
         return annotations
 
     def load_image(self, idx):
-        """
-        """
-
         info = self.coco.loadImgs(self.imageIds[idx])[0]
         path = os.path.join(self.root_dir, 'images', self.set, info['file_name'])
         image = cv.imread(path)
@@ -114,8 +110,6 @@ class Coco(Dataset):
         return img
 
 def collate(data):
-    """
-    """
     images = [d['img'] for d in data]
     annotations = [d['annot'] for d in data]
     scales = [d['scale'] for d in data]

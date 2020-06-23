@@ -1,4 +1,5 @@
 """
+Define constants for generating output images during testing loop
 """
 
 classes = [
@@ -21,6 +22,9 @@ classes = [
 ]
 
 def get_classes():
+    """
+    Get the object classes as a string.
+    """
     print(" ".join(classes))
 
 

@@ -10,12 +10,26 @@ import shutil
 
 from utils import annotation_split, dataset_split, create_json
 
-def makedirs(datapath, dirname):
+def makedirs(datapath: str, dirname: str) -> None:
+    """
+    Create directory structure if not exists.
+
+    Args:
+        datapath (str): Absolute path of current directory
+        dirname (str): Name of new directory to create
+    
+    Returns:
+        None
+    """
     dirname = os.path.join(datapath, dirname)
     if not os.path.isdir(dirname):
         os.makedirs(dirname)
 
 def main():
+    """
+    Parse command line inputs and generate COCO style dataset
+    with respective json annotation files.
+    """
     logger = logging.getLogger('logger')
     parser = argument_parser()
     args = parser.parse_args()
@@ -73,7 +87,7 @@ def main():
 
 def argument_parser(epilog: str = None) -> argparse.ArgumentParser:
     """
-    Create an argument parser for initiating the conversion process.
+    Create an argument parser for converting data COCO style split datasets.
 
     Args:
         epilog (str): epilog passed to ArgumentParser describing usage
@@ -87,13 +101,16 @@ def argument_parser(epilog: str = None) -> argparse.ArgumentParser:
     """)
 
     parser.add_argument("--data", "-d", help="Path to data root directory", required=True)
-    parser.add_argument("--cocofile", type=str, default="coco.json", help="Name of json file generated from the supervisely2coco script")
+    parser.add_argument("--cocofile", type=str, default="coco.json",
+                        help="Name of json file generated from the supervisely2coco script")
     parser.add_argument("--train_name", default="train", help="Name for the train dataset")
     parser.add_argument("--valid_name", default="valid", help="Name for the train dataset")
     parser.add_argument("--test_name", default="test", help="Name for the train dataset")
     parser.add_argument("--output", "-o", default="dataset", help="Output data dir", required=True)
-    parser.add_argument("--train-split", type=int, default=0.6, help="Percentage split for train dataset between 0 and 1")
-    parser.add_argument("--valid-split", type=int, default=0.15, help="Percentage split for valid dataset between 0 and 1")
+    parser.add_argument("--train-split", type=int, default=0.6,
+                        help="Percentage split for train dataset between 0 and 1")
+    parser.add_argument("--valid-split", type=int, default=0.15,
+                        help="Percentage split for valid dataset between 0 and 1")
     return parser
 
 

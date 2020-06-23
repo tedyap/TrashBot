@@ -1,12 +1,20 @@
 """
+Train time dataset augmentation transforms using numpy.
 """
-import numpy as np
 
+import numpy as np
 import torch
 import cv2 as cv
 
 class Normalize(object):
     """
+    Normalize input image with ImageNet mean and std dev.
+
+    Args:
+        s: Input data
+    
+    Returns:
+        dict containing normalized image and original annotations
     """
     def __init__(self):
         self.mean = np.array([[[0.485, 0.456, 0.406]]])
@@ -22,6 +30,16 @@ class Normalize(object):
 
 class Augment(object):
     """
+    Augment image during training time. Doesn't save augmented data
+    to disk.
+
+    Args:
+        flip_x (float): Probability for flipping along X-axis
+        flip_y (float): Probability for flipping along Y-axis
+        s: Input data
+
+    Returns:
+
     """
     def __call__(self, s, flip_x=0.5, flip_y=0.5):
         if np.random.rand() < flip_x:
@@ -44,6 +62,15 @@ class Augment(object):
 
 class Resize(object):
     """
+    Rezize input image to given dimensions.
+
+    Args:
+        size (float): Dimension to resize image
+        s: Input data
+    
+    Returns:
+        dict contraining resized image, annotations as numpy arrays
+        alongwith original scale
     """
     def __call__(self, s, size=512):
         image, annotation = s['img'], s['annot']

@@ -1,5 +1,5 @@
 """
-Utils for converting from Supervisely to MS-COCO
+Utils for converting from Supervisely to MS-COCO.
 """
 
 import os
@@ -15,7 +15,8 @@ from typing import Tuple
 
 
 class NpEncoder(json.JSONEncoder):
-    """Helper class for JSON dumping
+    """
+    Helper class for JSON dumping.
     """
     def default(self, obj):
         """
@@ -55,7 +56,7 @@ def get_all_annotation_files(base_dir: str) -> Tuple[list, list]:
         base_dir (str): path to base directory for annotations
     
     Returns:
-        tuple containing filenames(sans extension) and associated annotation json files
+        tuple(list, list) containing filenames(sans extension) and associated annotation json files
     """
     ann_path = os.path.join(base_dir, "*.json")
     annotation_files = glob.glob(ann_path)
@@ -83,7 +84,7 @@ def convert_image(id: int, name: str, jsons, category: dict, base_dir: str,
         start_idx (int): annotation index
     
     Returns:
-        tuple containing annotation for image info, objects
+        tuple(dictionary, list) containing annotation for image info, objects
     """
     fname = name if not image_name else Path(name).name
     base_coco = {
@@ -117,8 +118,19 @@ def convert_image(id: int, name: str, jsons, category: dict, base_dir: str,
 
     return base_coco, annotations
 
-def dataset_split(images, train_split, valid_split, test_split):
+def dataset_split(images: list, train_split: int, valid_split: int,
+                  test_split: int) -> Tuple[list, list, list]:
     """
+    Split dataset into train, test and valid sets.
+
+    Args:
+        images (list): List of all images
+        train_split (int): Integer indicating proportion of images as train set
+        valid_split (int): Integer indicating proportion of images as valid set
+        test_split (int): Integer indicating proportion of images as test set
+    
+    Returns:
+        tuple(list, list, list) with train, valid and test dataset images as lists after splitting
     """
     random.seed(42)
     num_images = len(images)
@@ -131,8 +143,21 @@ def dataset_split(images, train_split, valid_split, test_split):
 
     return train_ds, valid_ds, test_ds
 
-def create_json(base_json, images, annotations, output, filename):
+def create_json(base_json: dict, images: list, annotations: list, output: str,
+                filename: str) -> None:
+    """
+    Create COCO json annotation record.
 
+    Args:
+        base_json (dict): Base JSON dictionary containing metadatas
+        images (list): List of images
+        annotations (list): List of annotations
+        output (str): Path of output directory
+        filename (str): Filename to save generated JSON
+    
+    Returns:
+        None
+    """
     categories = base_json["categories"]
     info = base_json["info"]
     licenses = base_json["licenses"]
@@ -149,10 +174,20 @@ def create_json(base_json, images, annotations, output, filename):
     with open(output_file, 'w') as fp:
         json.dump(coco, fp, cls=NpEncoder)
 
-def annotation_split(annotations, train, valid, test):
+def annotation_split(annotations: list, train: list, valid: list,
+                     test: list) -> Tuple[list, list, list]:
     """
-    """
+    Create annotations splits.
 
+    Args:
+        annotations (list): List of dictionaries describing each annotation
+        train (list): Train set images
+        valid (list): Valid set images
+        test (list): Test set images
+    
+    Returns:
+        tuple(list, list, list) containing train, valid and test annotations after splitting
+    """
     train_annotations, valid_annotations, test_annotations = [], [], []
     annotations2images = defaultdict(list)
 

@@ -1,4 +1,5 @@
 """
+Initialize EfficientNet backbone.
 """
 
 import torch.nn as nn
@@ -6,6 +7,7 @@ from efficientnet_pytorch import EfficientNet as Net
 
 class EfficientNet(nn.Module):
     """
+    Create a nn.Module from pretrained EfficientNet
     """
     def __init__(self):
         super(EfficientNet, self).__init__()
@@ -19,6 +21,7 @@ class EfficientNet(nn.Module):
 
     def forward(self, x):
         """
+        Forward pass through EfficientNet to generate feature maps.
         """
         x = self.net._swish(self.net._bn0(self.net._conv_stem(x)))
         feature_maps = []
