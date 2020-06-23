@@ -1,4 +1,5 @@
 """
+Rotation transformation for data augmentation.
 """
 
 import sys
@@ -12,10 +13,17 @@ from .utils import clip_box
 path = os.path.join(os.path.relpath("."), "augmentations")
 sys.path.append(path)
 
-def rotate_image(image, angle):
+def rotate_image(image: np.ndarray, angle: float) -> np.ndarray:
     """
-    """
+    Rotate image with given angle such that rotated image is enclosed within the tightest rectangle.
 
+    Args:
+        image (numpy.ndarray): Image as numpy array
+        angle (float): Angle of rotation
+
+    Returns:
+        numpy.ndarray: Rotated image as a numpy array
+    """
     (h, w) = image.shape[:2]
     (cx, cy) = (w // 2, h // 2)
 
@@ -32,10 +40,16 @@ def rotate_image(image, angle):
     image = cv.warpAffine(image, M, (nw, nh))
     return image
 
-def get_corners(bbox):
+def get_corners(bbox: np.ndarray) -> np.ndarray:
     """
-    """
+    Get bounding box corners.
+
+    Args:
+        bbox (numpy.ndarray): Bounding boxes as numpy array
     
+    Returns:
+        numpy.ndarray containing bounding boxes with corner co-ordinates
+    """
     w = (bbox[:, 2] - bbox[:, 0]).reshape(-1, 1)
     h = (bbox[:, 3] - bbox[:, 1]).reshape(-1, 1)
 
@@ -54,10 +68,21 @@ def get_corners(bbox):
     corners = np.hstack((x1, y1, x2, y2, x3, y3, x4, y4))
     return corners
 
-def rotate_box(corners, angle, cx, cy, h, w):
+def rotate_box(corners: np.ndarray, angle: float, cx: int, cy: int, h: int, w: int) -> np.ndarray:
     """
-    """
+    Rotate bounding box.
 
+    Args:
+        corners (numpy.ndarray): Bounding boxes as numpy array
+        angle (float): Angle of rotation
+        cx (int): x co-ordinate of image center
+        cy (int): y co-ordinate of image center
+        h (int): Image height
+        w (int): Image width
+    
+    Returns:
+        numpy.ndarray contraing bounding boxes with corner co-ordinates
+    """
     corners = corners.reshape(-1, 2)
     corners = np.hstack((corners, np.ones((
         corners.shape[0], 1), dtype=type(corners[0][0])))
@@ -78,10 +103,16 @@ def rotate_box(corners, angle, cx, cy, h, w):
     box = box.reshape(-1, 8)
     return box
 
-def get_new_bbox(corners):
+def get_new_bbox(corners: np.ndarray) -> np.ndarray:
     """
-    """
+    Get enclosing box for rotated corners.
 
+    Args:
+        corners (numpy.ndarray): Bounding boxes with corner co-ordinates
+    
+    Returns:
+        numpy.ndarray containing bounding boxes with corner co-cordinates after rotation
+    """
     x = corners[:, [0, 2, 4, 6]]
     y = corners[:, [1, 3, 5, 7]]
 
@@ -96,12 +127,21 @@ def get_new_bbox(corners):
 
 class RandomRotate(object):
     """
-    """
+    Randomly rotate an image. Bounding boxes with <25% of area in
+    the transformed image are dropped.
 
-    def __init__(self, angle=10):
+    Args:
+        angle (float): Range in (1-translate, 1+translate) randomly chosen as rotation angle
+                      If tuple, angle is randomly chosen from the range from the tuple
+
+    Returns:
+        numpy.ndarray: Rotated image as a numpy array
+        numpy.ndarray: Transformed bounding boxes
+    """
+    def __init__(self, angle: float = 10):
         self.angle = angle
     
-    def __call__(self, image, bbox):
+    def __call__(self, image: np.ndarray, bbox: np.ndarray):
         angle = random.uniform(*self.angle)
 
         w, h = image.shape[1], image.shape[0]

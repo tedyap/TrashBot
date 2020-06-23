@@ -1,12 +1,23 @@
 """
+Helper function to generate COCO style annotation records one by one.
 """
 
 import json
 
-def get_json(current_idx, image, annotation_idx, annotations, output):
+def get_json(current_idx: int, image: str, annotation_idx: int, annotations: list, output: str):
     """
-    """
+    Generate COCO style record for each input image.
 
+    Args:
+        current_idx (int): Current image id
+        image (str): Filename of image file
+        annotation_idx (int): Current annotation index
+        annotations (list): List of bounding box co-ordinates
+        output (str): Path to output json file to append records to
+
+    Returns:
+        int: latest annotation index
+    """
     with open(output, 'r') as fp:
         data = json.load(fp)
 

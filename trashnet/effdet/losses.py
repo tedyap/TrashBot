@@ -6,14 +6,18 @@ of RetinaNet where FocalLoss was first introduced
 
 https://arxiv.org/abs/1708.02002
 https://github.com/yhenon/pytorch-retinanet/blob/master/retinanet/losses.py
-
 """
 
 import torch
 import torch.nn as nn
 
-def calculate_IoU(a, b):
+def calculate_IoU(a, b) -> float:
     """
+    Helper function to calculate Intersection over Union for
+    ground truth bounding box and predicted bounding box
+
+    Returns:
+        float as the IoU score for the given inputs
     """
     area = (b[:, 2] - b[:, 0]) * (b[:, 3] - b[:, 1])
     
@@ -33,6 +37,8 @@ def calculate_IoU(a, b):
     
 class FocalLoss(nn.Module):
     """
+    Focal Loss for EfficientDet.
+    As defined in RetinaNet: https://arxiv.org/abs/1708.02002
     """
 
     def __init__(self):

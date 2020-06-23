@@ -1,13 +1,22 @@
 """
+Utilities for augmentation.
 """
 
 import cv2 as cv
 import numpy as np
+from typing import Union
 
-def draw_rectangle(image, coords, color=None):
+def draw_rectangle(image: np.ndarray, coords: np.ndarray, color: Union(None, list) = None) -> np.ndarray:  # noqa: E501
     """
-    """
+    Draw bounding box rectangles on the input image.
 
+    Args:
+        image (np.ndarray): Image as a numpy array
+        coords (np.ndarray): numpy array containing bounding boxes
+
+    Returns:
+        numpy.ndarray: Image(as a numpy array) with bounding boxes drawn
+    """
     im = image.copy()
     coords = coords[:, :4]
     coords = coords.reshape(-1, 4)
@@ -22,15 +31,30 @@ def draw_rectangle(image, coords, color=None):
     
     return im
 
-def area(bbox):
+def area(bbox: np.ndarray) -> float:
     """
+    Calculate area of the input bounding box.
+
+    Args:
+        bbox (numpy.ndarray): numpy array containing bounding boxes
+    
+    Returns:
+        float: area of the input bounding box
     """
     return (bbox[:, 2] - bbox[:, 0]) * (bbox[:, 3] - bbox[:, 1])
     
-def clip_box(bbox, clip_box, alpha):
+def clip_box(bbox: np.ndarray, clip_box: np.ndarray, alpha: float) -> np.ndarray:
     """
-    """
+    Clip bounding boxes to image borders.
 
+    Args:
+        bbox (numpy.ndarray): numpy array containing bounding boxes
+        clip_box (numpy.ndarray): numpy array specifying the four diagonal corners of an image
+        alpha (float): Threshold value dictating whether to keep bounding box or not
+    
+    Returns:
+        np.ndarray: numpy array with clipped bounding boxes
+    """
     area_ = (area(bbox))
     x_min = np.maximum(bbox[:, 0], clip_box[0]).reshape(-1, 1)
     y_min = np.maximum(bbox[:, 1], clip_box[1]).reshape(-1, 1)

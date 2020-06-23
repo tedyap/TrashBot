@@ -1,4 +1,5 @@
-""" # noqa : E902
+"""
+Translation transformation for data augmentation.
 """
 
 import sys
@@ -13,13 +14,21 @@ sys.path.append(path)
 
 class RandomTranslate(object):
     """
-    """
+    Translate the input image randomly. Bounding boxes with <25% area in
+    the transformed image are dropped.
 
-    def __init__(self, translate=0.2, diff=False):
+    Args:
+        translate (float): Range in (1-translate, 1+translate) randomly chosen as translation factor
+
+    Returns:
+        numpy.ndarray: Translated image as a numpy array
+        numpy.ndarray: Transformed bounding boxes
+    """
+    def __init__(self, translate: float = 0.2, diff=False):
         self.translate = translate
         self.diff = diff
     
-    def __call__(self, image, bbox):
+    def __call__(self, image: np.ndarray, bbox: np.ndarray):
         shape = image.shape
         
         translate_x = random.uniform(*self.translate)
@@ -55,14 +64,23 @@ class RandomTranslate(object):
 
 class Translate(object):
     """
-    """
+    Translate the input image randomly. Bounding boxes with <25% area in
+    the transformed image are dropped.
 
-    def __init__(self, x=0.2, y=0.2, diff=False):
+    Args:
+        x (float): Transformation factor along X-axis
+        y (float): Transformation factor along Y-axis
+
+    Returns:
+        numpy.ndarray: Translated image as a numpy array
+        numpy.ndarray: Transformed bounding boxes
+    """
+    def __init__(self, x: float = 0.2, y: float = 0.2, diff=False):
         self.translate__x = x
         self.translate__y = y
         self.diff = diff
 
-    def __call__(self, image, bbox):
+    def __call__(self, image: np.ndarray, bbox: np.ndarray):
         shape = image.shape
         translate_x = self.translate__x
         translate_y = self.translate__y

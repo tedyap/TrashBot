@@ -1,4 +1,5 @@
 """
+Runner script to perform data augmentation and save generated data to disk.
 """
 
 import os
@@ -21,6 +22,9 @@ from augmentation.rotate import RandomRotate
 from augmentation.utils import draw_rectangle
 
 def main():
+    """
+    Parse command line inputs and run through the augmentation loop.
+    """
     logger = logging.getLogger('logger')
     parser = argument_parser()
     args = parser.parse_args()
@@ -78,8 +82,19 @@ def main():
     
 def augment_image(path, bbox, transforms, random: bool = True, viz: bool = False):
     """
-    """
+    Apply input transforms to given image.
 
+    Args:
+        path (str): Path to image on disk
+        bbox (numpy.ndarray): Bounding boxes as numpy array
+        transforms (list): List of transformation objects to be Pipelined to input image
+        random (bool): Boolean indicating whether or not transforms will be random
+        viz (bool): Boolean indicating whether to plot before and after transformed images
+
+    Returns:
+        numpy.ndarray: Pipelined input image as a numpy array
+        numpy.ndarray: Transformed bounding boxes
+    """
     image = cv.imread(path)[:, :, ::-1]
     if viz:
         plt.imshow(draw_rectangle(image, bbox))

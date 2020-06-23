@@ -1,4 +1,5 @@
 """
+Runner script that takes in user input via command line and steps through the training loop.
 """
 
 import argparse
@@ -21,13 +22,20 @@ from torchvision import transforms
 from tensorboardX import SummaryWriter
 from tqdm import tqdm
 
-def argument_parser(epilog: str = None):
+def argument_parser(epilog: str = None) -> argparse.ArgumentParser:
     """
+    Create an argument parser for accepting training loop hyperparameters and paths to data and output directories.
+
+    Args:
+        epilog (str): epilog passed to ArgumentParser describing usage.
+    
+    Returns:
+        argparse.ArgumentParser
     """
 
     parser = argparse.ArgumentParser(epilog=epilog or f"""
     Example:
-        python train.py --num_epochs NUM_EPOCHS --valid_interval 1 --es_min_delta MINI_DELTA --es_patience PATIENCE --path /path/to/dat/folder/root --log /path/to/log directory --save_path models # noqa: F541
+        python train.py --num_epochs NUM_EPOCHS --valid_interval VALID_INTERVAL --es_min_delta MINI_DELTA --es_patience PATIENCE --path /path/to/data/folder/root --log /path/to/log/dir --save_path /path/to/save/dir # noqa: F541
     """)
 
     parser.add_argument("--image_size", type=int, default=512, help="The height and width for images passed to the network")
@@ -46,8 +54,15 @@ def argument_parser(epilog: str = None):
     arg = parser.parse_args()
     return arg
 
-def train(args):
+def train(args: argparse.Namespace) -> None:
     """
+    Training loop to generate dataloaders and run the model.
+
+    Args:
+        args (arparse.NameSpace): argparse object containing parsed user command line input.
+
+    Returns:
+        None
     """
 
     logger = logging.getLogger('logger')

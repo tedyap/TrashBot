@@ -1,4 +1,5 @@
 """
+Utility functions for dealing with bounding boxes, NMS and Swish activation function.
 """
 
 import numpy as np
@@ -10,16 +11,12 @@ def nms(det, threshold):
     return nms_torch(det[:, :4], det[:, 4], threshold)
 
 class Swish(nn.Module):
-    """
-    """
     def forward(self, x):
         """
         """
         return x * torch.sigmoid(x)
 
 class BBoxTransform(nn.Module):
-    """
-    """
     def __init__(self, mean: int = None, std: int = None):
         super(BBoxTransform, self).__init__()
         if mean is None:
@@ -39,8 +36,6 @@ class BBoxTransform(nn.Module):
             self.std = self.std.cuda()
 
     def forward(self, anchors, regressors):
-        """
-        """
         widths = (anchors[:, :, 2] - anchors[:, :, 0])
         heights = (anchors[:, :, 3] - anchors[:, :, 1])
         center_x = anchors[:, :, 0] + 0.5 * widths
@@ -64,14 +59,10 @@ class BBoxTransform(nn.Module):
         return torch.stack([pred_box_x1, pred_box_y1, pred_box_x2, pred_box_y2], dim=2)
 
 class ClipBoxes(nn.Module):
-    """
-    """
     def __init__(self):
         super(ClipBoxes, self).__init__()
 
     def forward(self, anchors, image):
-        """
-        """
         _, _, h, w = image.shape
         anchors[:, :, 0] = torch.clamp(anchors[:, :, 0], min=0)
         anchors[:, :, 1] = torch.clamp(anchors[:, :, 1], min=0)
@@ -96,7 +87,6 @@ class Anchors(nn.Module):
             self.scales = np.array([2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)])
 
     def forward(self, image):
-
         image_shape = image.shape[2:]
         image_shape = np.array(image_shape)
         image_shapes = [(image_shape + 2 ** x - 1) // (2 ** x) for x in self.pyramid_levels]
@@ -116,8 +106,6 @@ class Anchors(nn.Module):
         return anchors
 
 def generate_anchors(base=16, ratios=None, scales=None):
-    """
-    """
     if ratios is None:
         ratios = np.array([0.5, 1, 2])
     if scales is None:
@@ -136,8 +124,6 @@ def generate_anchors(base=16, ratios=None, scales=None):
     return anchors
 
 def shift(shape, stride, anchors):
-    """
-    """
     shift_x = (np.arange(0, shape[1]) + 0.5) * stride
     shift_y = (np.arange(0, shape[0]) + 0.5) * stride
     shift_x, shift_y = np.meshgrid(shift_x, shift_y)

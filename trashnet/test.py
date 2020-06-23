@@ -1,4 +1,5 @@
 """
+Runner script to test the trained model.
 """
 
 import argparse
@@ -14,11 +15,20 @@ from constants import colors
 import torch
 from torchvision import transforms
 
-def argument_parser(epilog: str = None):
+def argument_parser(epilog: str = None) -> argparse.ArgumentParser:
     """
+    Create an argument parser for accepting testing loop thresholds and paths to output and pretrained model directories.
+
+    Args:
+        epilog (str): epilog passed to ArgumentParser describing usage.
+    
+    Returns:
+        argparse.ArgumentParser
     """
+
     parser = argparse.ArgumentParser(epilog=epilog or f"""
-    Example: # noqa: F541
+    Example:
+        python test.py --path /path/to/data/folder/root --pretrained /path/to/pretrained/model/dir --output /path/to/output/dir  # noqa: F541
     """)
 
     parser.add_argument("--image_size", type=int, default=512, help="The height and width for images passed to the network")
@@ -31,7 +41,17 @@ def argument_parser(epilog: str = None):
     arg = parser.parse_args()
     return arg
 
-def test(args):
+def test(args: argparse.Namespace) -> None:
+    """
+    Testing loop to generate testset dataloaders and predictions on the testset.
+
+    Args:
+        args (arparse.NameSpace): argparse object containing parsed user command line input.
+
+    Returns:
+        None
+    """
+
     model = torch.load(args.pretrained).module
     if torch.cuda.is_available():
         model = model.cuda()
@@ -81,4 +101,3 @@ def test(args):
 if __name__ == "__main__":
     arg = argument_parser()
     test(arg)
-
