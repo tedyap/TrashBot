@@ -27,7 +27,7 @@ class RandomScale(object):
         numpy.ndarray: Scaled image as a numpy array
         numpy.ndarray: Transformed bounding boxes
     """
-    def __init__(self, scale: Union(tuple, float) = 0.2, diff=False):
+    def __init__(self, scale: Union[tuple, float] = 0.2, diff=False):
         self.scale = scale
         if type(self.scale) == tuple:
             assert len(self.scale) == 2, "Invalid range"
