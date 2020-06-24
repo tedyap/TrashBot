@@ -19,3 +19,4 @@ dependencies:
       - efficientnet_pytorch
       - tensorboardX
       - sphinx
+      - sphinx_rtd_theme
