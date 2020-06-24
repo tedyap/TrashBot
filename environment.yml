@@ -1,0 +1,21 @@
+name: trashbot
+dependencies:
+  - pip
+  - pip:
+      - cython
+      - xmltodict
+      - dicttoxml
+      - numpy
+      - scipy
+      - tqdm
+      - streamlit
+      - opencv-python
+      - matplotlib
+      - Pillow
+      - git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI
+      - pycocotools
+      - torch
+      - torchvision
+      - efficientnet_pytorch
+      - tensorboardX
+      - sphinx

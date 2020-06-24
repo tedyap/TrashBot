@@ -20,21 +20,20 @@ END_OF_USAGE
 # Category names
 # TODO: Find a better way of storing this
 declare -a arr=("aluminum cans" "aluminum foil crumpled" "aluminum food container" 
-                "banana peel" "bubble wrap" "cardboard box" "chips packet"
+                "banana peel" "bubble wrap" "cardboard box" "chips packet" "small scrap"
                 "clear plastic cup full" "clear plastic lid" "clear plastic straw lid" 
                 "coffee cup" "coffee cup lid" "condiment packet" "food product packaging" 
-                "food scrap" "food wrapper" "glass bottle" "gloves" "mixed items"
-                "orange peel" "paper bag" "paper bag full" "paper box" "paper card" 
-                 "paper crumpled" "paper cup" "paper food box" "paper newspaper"
+                "food scrap" "food wrapper" "glass bottle" "gloves" "orange peel"
+                "paper bag" "paper bag full" "paper box" "paper card" "tetrapak carton"
+                "paper crumpled" "paper cup" "paper food box" "paper newspaper"
                 "paper food togo container" "paper napkin" "paper scrap" "paper sheet" 
                 "paper plate" "paper pulp drink tray" "paper shredded" "plastic 6 cup" 
-                 "plastic bag" "plastic bottle" "plastic bottle full"
+                "plastic bag" "plastic bottle" "plastic bottle full" "styrofoam plate"
                 "plastic bottle small" "plastic clear clamshell" "plastic clear lid"
                 "plastic clear cup empty" "plastic clear cup full" "plastic plate"
                 "plastic food container" "plastic food container full" "plastic straw"
-                "plastic utensil" "product packaging" "shredded paper"
-                "small scrap" "styrofoam cup" "styrofoam food container" 
-                "styrofoam plate" "tetrapak carton"
+                "plastic utensil" "product packaging" "shredded paper" "styrofoam cup"
+                "styrofoam food container" 
                 )
 
 data_path="/home/saurabh/Desktop/TrashBot"
