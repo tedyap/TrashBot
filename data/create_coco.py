@@ -8,7 +8,7 @@ import json
 import logging
 import shutil
 
-from utils import annotation_split, dataset_split, create_json
+from .utils import annotation_split, dataset_split, create_json
 
 def makedirs(datapath: str, dirname: str) -> None:
     """

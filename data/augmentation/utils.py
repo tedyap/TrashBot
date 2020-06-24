@@ -6,7 +6,7 @@ import cv2 as cv
 import numpy as np
 from typing import Union
 
-def draw_rectangle(image: np.ndarray, coords: np.ndarray, color: Union(None, list) = None) -> np.ndarray:  # noqa: E501
+def draw_rectangle(image: np.ndarray, coords: np.ndarray, color: Union[None, list] = None) -> np.ndarray:  # noqa: E501
     """
     Draw bounding box rectangles on the input image.
 

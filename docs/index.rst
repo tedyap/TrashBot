@@ -14,6 +14,13 @@ about `TrashBot <https://cleanrobotics.com/trashbot/>`_.
 .. toctree::
    :glob:
    :maxdepth: 1
-   :caption: TrashNet
- 
-   trashnet/*
+   :caption: Source
+
+   modules/dataset
+   modules/augmentations
+   modules/trashnet
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+   :caption: Source
