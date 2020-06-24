@@ -8,7 +8,7 @@ Within the root directory of the project, run the following command
 
 .. code-block:: bash
 
-    python trashnet/train.py --num_epochs NUM_EPOCHS --path DATA_PATH
+    python trashnet/train.py --num_epochs NUM_EPOCHS --path DATA_PATH/dataset
 
 where NUM_EPOCHS is the number of epochs you want to train the network for
 and DATA_PATH is the path to the COCO style dataset that you set up
