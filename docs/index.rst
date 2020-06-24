@@ -23,4 +23,10 @@ about `TrashBot <https://cleanrobotics.com/trashbot/>`_.
 .. toctree::
    :glob:
    :maxdepth: 1
-   :caption: Source
+   :caption: Usage
+
+   tutorials/setup.rst
+   tutorials/data.rst
+   tutorials/coco.rst
+   tutorials/train.rst
+   tutorials/test.rst
